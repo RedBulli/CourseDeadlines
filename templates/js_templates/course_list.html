@@ -1,0 +1,8 @@
+{% load templatetag_handlebars %}
+{% tplhandlebars "course_list_tmpl" %}
+  <ul>
+    {{#courses}}
+      <li>{{attributes.name}}</li>
+    {{/courses}}
+  </ul>
+{% endtplhandlebars %}
