@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'tastypie',
     'templatetag_handlebars',
+    'Course',
 )
 
 # A sample logging configuration. The only tangible logging

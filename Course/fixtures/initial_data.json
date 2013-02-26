@@ -1,0 +1,30 @@
+[
+  {
+    "model": "Course.Course",
+    "pk": 1,
+    "fields": {
+      "name": "WWW-applications"
+    }
+  },
+  {
+    "model": "Course.Course",
+    "pk": 2,
+    "fields": {
+      "name": "Introduction to Software Engineering"
+    }
+  },
+  {
+    "model": "Course.Course",
+    "pk": 3,
+    "fields": {
+      "name": "Internet Security"
+    }
+  },
+  {
+    "model": "Course.Course",
+    "pk": 4,
+    "fields": {
+      "name": "Clean Code"
+    }
+  }
+]
