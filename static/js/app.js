@@ -32,7 +32,7 @@ function initializeCourseAttendances() {
 }
 
 function bindUiActions() {
-  $('#courseNameSearch').bind('keyup', function(event) {
+  $('#courseNameSearch').bind('input', function(event) {
     searchCourses.search($(this).val(), allCourses);
   });
 }

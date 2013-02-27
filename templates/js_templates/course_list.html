@@ -1,6 +1,6 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "course_list_tmpl" %}
   {{#courses}}
-    <li>{{attributes.course_id}}: {{attributes.name}}</li>
+    <li>{{attributes.course_id}} <a href="" class="removeCourse"><i class="icon-trash"></i></a></li>
   {{/courses}}
 {% endtplhandlebars %}
