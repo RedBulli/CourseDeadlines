@@ -10,6 +10,7 @@
 
   <script src="{{ STATIC_URL }}js/plugins/jquery.js"></script>
   <script src="{{ STATIC_URL }}js/plugins/underscore.js"></script>
+  <script src="{{ STATIC_URL }}js/plugins/json2.js"></script>
   <script src="{{ STATIC_URL }}js/plugins/backbone.js"></script>
   <script src="{{ STATIC_URL }}js/plugins/backbone-relational.js"></script>
   <script src="{{ STATIC_URL }}js/plugins/backbone-tastypie.js"></script>
@@ -24,6 +25,7 @@
 </head>
 <body>
   {% include "js_templates/course_list.html" %}
+  {% include "js_templates/course_search_list.html" %}
   <header>
     <h1>Course Deadlines</h1>
     <nav>
