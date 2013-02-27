@@ -2,11 +2,11 @@ from django.db import models
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=100)
+    course_id = models.CharField(max_length=100, primary_key=True)
 
     def __unicode__(self):
-        return u'%s' % (self.name)
+        return u'%s' % (self.course_id)
 
     def save(self):
         self.full_clean()
-        super(Player, self).save()
+        super(Course, self).save()

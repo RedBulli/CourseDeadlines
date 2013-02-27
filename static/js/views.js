@@ -1,5 +1,5 @@
 //Backbone views
-var CourseListView = Backbone.View.extend({
+var CourseAttendancesView = Backbone.View.extend({
   initialize: function() {
     this.template = Handlebars.compile($('#course_list_tmpl').html());
   },
@@ -13,15 +13,13 @@ var CourseSearchListView = Backbone.View.extend({
     _.bindAll(this);
     this.template = Handlebars.compile($('#course_search_list_tmpl').html());
     this.collection.bind('render', this.render);
-    this.collection.bind('renderDatalist', this.renderDatalist);
   },
   render: function() {
     this.$el.html(this.template({courses: this.collection.models}));
-  },
-  renderDatalist: function() {
-    $('#courseDatalist').empty();
-    this.collection.each(function(course) {
-      $('#courseDatalist').append('<option value="' + course.name + '">');
+    $('.attendCourse').click(function() {
+      var courseAttendace = new CourseAttendance({course_id: $(this).val()});
+      courseAttendace.save();
+      courseAttendances.add(courseAttendace);
     });
   }
 });
@@ -34,7 +32,7 @@ var CourseDataListView = Backbone.View.extend({
   render: function() {
     $('#courseDatalist').empty();
     this.collection.each(function(course) {
-      $('#courseDatalist').append('<option value="' + course.name + '">');
+      $('#courseDatalist').append('<option value="' + course.get('name') + '">');
     });
   }
 });
