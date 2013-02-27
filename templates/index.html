@@ -29,11 +29,31 @@
     <nav>
     </nav>
   </header>
-  <h2>Courses</h2>
-  <div id="courseList">
-  </div>
+  <h2>Courses I'm taking</h2>
+  <ul id="courseList">
+  </ul>
   <aside>
     Other info
   </aside>
+  <a href="#newCourseModal" role="button" class="btn" data-toggle="modal">Add course</a>
+  <div id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form>
+      <header>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Add new course</h3>
+      </header>
+      <div class="modal-body">
+        <input type="search" id="courseNameSearch" name="name" list="courseDatalist"/>
+        <datalist id="courseDatalist">
+        </datalist>
+        <ul id="searchResults">
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary">Add course</button>
+      </div>
+    </form>
+  </div>
 </body>
 </html>

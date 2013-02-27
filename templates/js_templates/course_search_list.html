@@ -1,6 +1,6 @@
 {% load templatetag_handlebars %}
-{% tplhandlebars "course_list_tmpl" %}
+{% tplhandlebars "course_search_list_tmpl" %}
   {{#courses}}
-    <li>{{attributes.name}}</li>
+    <li>{{id}}: {{name}}</li>
   {{/courses}}
 {% endtplhandlebars %}
