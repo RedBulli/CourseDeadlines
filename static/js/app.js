@@ -24,7 +24,8 @@ var Search = function() {
   var _this = this;
   _this.ajax = null;
   _this.search = function(name) {
-    if ($.inArray(name, searchedNames) == -1) {
+    if (name.length > 0 && $.inArray(name, searchedNames) == -1) {
+      searchedNames.push(name);
       _this.ajax = $.getJSON(COURSE_SEARCH_URL+name+'&callback=?', function(data) {
         $.each(data, function(index, course) {
           noppaCourseList[course.course_id] = course;
