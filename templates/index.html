@@ -20,7 +20,9 @@
 
   <script src="{{ STATIC_URL }}js/models.js"></script>
   <script src="{{ STATIC_URL }}js/views.js"></script>
+  {% if user.is_authenticated %}
   <script src="{{ STATIC_URL }}js/app.js"></script>
+  {% endif %}
   
 </head>
 <body>
@@ -31,7 +33,9 @@
     <nav>
     </nav>
   </header>
+  {% if user.is_authenticated %}
   <h2>Courses I'm taking</h2>
+  Loggeg with: {{ user.email }}. <a href="/logout">Logout</a>
   <ul id="courseList">
   </ul>
   <aside>
@@ -54,5 +58,8 @@
       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     </div>
   </div>
+  {% else %}
+  <a href="/openid/login">Login using Google</a>
+  {% endif %}
 </body>
 </html>

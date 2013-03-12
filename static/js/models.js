@@ -1,19 +1,26 @@
 //Backbone models
-var COURSES_ROOT = '/api/v1/courses/';
+var ENROLLMENTS_ROOT = '/api/v1/enrollments/';
 var API_KEY = 'cdda4ae4833c0114005de5b5c4371bb8';
 var NOPPA_COURSE_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 
-var CourseAttendance = Backbone.RelationalModel.extend({
-  urlRoot: COURSES_ROOT,
+var CourseEnrollment = Backbone.RelationalModel.extend({
+  urlRoot: ENROLLMENTS_ROOT,
+  /*
   idAttribute: "course_id",
   url: function() {
     return this.urlRoot + this.id
   }
+  */
 });
 
-var CourseAttendances = Backbone.Collection.extend({
-  url: COURSES_ROOT,
-  model: CourseAttendance
+var CourseEnrollments = Backbone.Collection.extend({
+  url: ENROLLMENTS_ROOT,
+  model: CourseEnrollment,
+  addCourse: function(course_id) {
+    var enrollment = new CourseEnrollment({course_id: course_id});
+    enrollment.save();
+    this.add(enrollment);
+  }
 });
 
 var NoppaCourse = Backbone.Model.extend({

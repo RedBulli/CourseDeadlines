@@ -1,12 +1,12 @@
 //Application logic
 
-var courseAttendances;
+var courseEnrollments;
 var allCourses;
 
 $(document).ready(function() {
   addBootstrapClasses();
   bindUiActions();
-  initializeCourseAttendances();
+  initializeCourseEnrollments();
   initializeNoppaCourses();
 });
 
@@ -19,14 +19,14 @@ function initializeNoppaCourses() {
   var datalistView = new CourseDataListView({collection: allCourses});
 }
 
-function initializeCourseAttendances() {
-  courseAttendances = new CourseAttendances();
-  courseAttendances.fetch({
+function initializeCourseEnrollments() {
+  courseEnrollments = new CourseEnrollments();
+  courseEnrollments.fetch({
     success: function(collection) {
-      var courseAttendancesView = new CourseAttendancesView(
-        {collection: courseAttendances, el: '#courseList'}
+      var courseEnrollmentsView = new CourseEnrollmentsView(
+        {collection: courseEnrollments, el: '#courseList'}
       );
-      courseAttendancesView.render();
+      courseEnrollmentsView.render();
     }
   });
 }

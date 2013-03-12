@@ -1,5 +1,5 @@
 //Backbone views
-var CourseAttendancesView = Backbone.View.extend({
+var CourseEnrollmentsView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render');
     this.template = Handlebars.compile($('#course_list_tmpl').html());
@@ -22,9 +22,7 @@ var CourseSearchListView = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template({courses: this.collection.models}));
     $('.attendCourse').click(function() {
-      var courseAttendace = new CourseAttendance({course_id: $(this).val()});
-      courseAttendace.save();
-      courseAttendances.add(courseAttendace);
+      courseEnrollments.addCourse($(this).val());
     });
   }
 });

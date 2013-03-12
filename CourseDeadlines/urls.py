@@ -2,13 +2,13 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 from tastypie.api import Api
 from django.contrib import admin
-from Course.api import CourseResource
+from Course.api import EnrollmentResource
 
 
 admin.autodiscover()
 
 v1_api = Api(api_name='v1')
-v1_api.register(CourseResource())
+v1_api.register(EnrollmentResource())
 
 urlpatterns = patterns('',
     # Examples:
@@ -22,4 +22,6 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^openid/', include('django_openid_auth.urls')),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout')
 )

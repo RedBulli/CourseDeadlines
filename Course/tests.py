@@ -1,6 +1,6 @@
 from django.test import TestCase
-from Course.models import Course
+from Course.models import Enrollment
 
-class CourseTest(TestCase):
+class EnrollmentTest(TestCase):
     def test_construction(self):
-        course = Course()
+        enrollment = Enrollment()
