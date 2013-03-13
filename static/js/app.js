@@ -2,7 +2,7 @@
 
 var courseEnrollments;
 var allCourses;
-var organizations;
+var organizations = [];
 
 $(document).ready(function() {
   fetchAllCourses();
@@ -12,23 +12,28 @@ $(document).ready(function() {
 });
 
 function fetchAllCourses() {
-  organizations = [];
+  allCourses = new NoppaCourses();
   var orgUrl = 'http://noppa-api-dev.aalto.fi/api/v1/organizations?key=cdda4ae4833c0114005de5b5c4371bb8&callback=?';
   $.getJSON(orgUrl, function(data) {
     $.each(data, function(index, value) {
       organizations.push(value.org_id);
     });
-    fetchAllNoppaCourses(organizations);
+    fetchCoursesFromOrganization(organizations.shift());
   });
 }
 
-function fetchAllNoppaCourses(organizations) {
-  allCourses = new NoppaCourses();
-  allCourses.fetchCoursesFromOrganizations(organizations, function() {
-    //After all courses are fetched
+function fetchCoursesFromOrganization(organization) {
+  if (organization != undefined) {
+    var courseUrl = 'http://noppa-api-dev.aalto.fi/api/v1/courses?org_id='+organization+'&key=cdda4ae4833c0114005de5b5c4371bb8&callback=?';
+    $.getJSON(courseUrl, function(data) {
+      allCourses.update(data, {remove: false});
+      fetchCoursesFromOrganization(organizations.shift());
+    });
+  }
+  else {
     var datalistView = new CourseDataListView({collection: allCourses});
     datalistView.render();
-  });
+  }
 }
 
 function initializeCourseEnrollments() {

@@ -29,23 +29,6 @@ var NoppaCourses = Backbone.Collection.extend({
   model: NoppaCourse,
   urlRoot: NOPPA_COURSE_ROOT,
   searches: {},
-  fetchCoursesFromOrganizations: function(organizations, callback) {
-    var options = {};
-    options.dataType = 'jsonp';
-    var _this = this;
-    var success_count = 0;
-    $.each(organizations, function(index, value) {
-      options.data = {key: API_KEY, org_id: value};
-      options.success = function(collection) {
-        _this.update(collection.models, {remove: false});
-        success_count++;
-        if (success_count>=organizations.length) {
-          callback();
-        }
-      };
-      return Backbone.Collection.prototype.fetch.call(_this, options);
-    });
-  },
   search: function (name) {
     return this.filter(function(course) {
       return course.get('name').toLowerCase().indexOf(name.toLowerCase()) != -1;
