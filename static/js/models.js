@@ -18,8 +18,9 @@ var CourseEnrollments = Backbone.Collection.extend({
   model: CourseEnrollment,
   addCourse: function(course_id) {
     var enrollment = new CourseEnrollment({course_id: course_id});
-    enrollment.save();
-    this.add(enrollment);
+    enrollment.save(enrollment.attributes, {success: function() {
+      this.add(enrollment);
+    }});
   }
 });
 
