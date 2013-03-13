@@ -6,9 +6,12 @@ var CourseEnrollmentsView = Backbone.View.extend({
     this.collection.bind('add', this.render);
   },
   render: function() {
+    var _this = this;
     this.$el.html(this.template({courses: this.collection.models}));
-    $('.removeCourse').click(function() {
-      return false;
+    $('.removeCourse').click(function(event) {
+      event.preventDefault();
+      _this.collection.get($(this).attr('href')).destroy();
+      _this.render();
     });
   }
 });

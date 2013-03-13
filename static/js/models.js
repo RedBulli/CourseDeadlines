@@ -17,10 +17,12 @@ var CourseEnrollments = Backbone.Collection.extend({
   url: ENROLLMENTS_ROOT,
   model: CourseEnrollment,
   addCourse: function(course_id) {
+    var _this = this;
     var enrollment = new CourseEnrollment({course_id: course_id});
     enrollment.save(enrollment.attributes, {success: function() {
-      this.add(enrollment);
+      _this.add(enrollment);
     }});
+    this.trigger('render');
   }
 });
 
