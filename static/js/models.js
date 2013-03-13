@@ -4,13 +4,7 @@ var API_KEY = 'cdda4ae4833c0114005de5b5c4371bb8';
 var NOPPA_COURSE_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 
 var CourseEnrollment = Backbone.RelationalModel.extend({
-  urlRoot: ENROLLMENTS_ROOT,
-  /*
-  idAttribute: "course_id",
-  url: function() {
-    return this.urlRoot + this.id
-  }
-  */
+  urlRoot: ENROLLMENTS_ROOT
 });
 
 var CourseEnrollments = Backbone.Collection.extend({
@@ -28,36 +22,34 @@ var CourseEnrollments = Backbone.Collection.extend({
 
 var NoppaCourse = Backbone.Model.extend({
   urlRoot: NOPPA_COURSE_ROOT,
-  idAttribute: "course_id"
+  idAttribute: 'course_id'
 });
 
 var NoppaCourses = Backbone.Collection.extend({
   model: NoppaCourse,
   urlRoot: NOPPA_COURSE_ROOT,
   searches: {},
-  search: function(name, allCourses, options) {
+  fetchCoursesFromOrganizations: function(organizations, callback) {
+    var options = {};
+    options.dataType = 'jsonp';
     var _this = this;
-    if (name.length == 0) {
-      return;
-    }
-    if (!(name in _this.searches)) {
-      _this.searches[name] = [];
-      options || (options = {});
-      var data = (options.data || {});
-      options.dataType = 'jsonp';
-      options.data = {key: API_KEY, search: name};
+    var success_count = 0;
+    $.each(organizations, function(index, value) {
+      options.data = {key: API_KEY, org_id: value};
       options.success = function(collection) {
-        allCourses.update(collection.models, {remove: false});
-        allCourses.trigger('update');
-        _this.searches[name] = collection.models;
-        _this.trigger('render');
+        _this.update(collection.models, {remove: false});
+        success_count++;
+        if (success_count>=organizations.length) {
+          callback();
+        }
       };
-      return Backbone.Collection.prototype.fetch.call(this, options);
-    }
-    else {
-      _this.models = this.searches[name];
-      _this.trigger('render');
-    }
+      return Backbone.Collection.prototype.fetch.call(_this, options);
+    });
+  },
+  search: function (name) {
+    return this.filter(function(course) {
+      return course.get('name').toLowerCase().indexOf(name.toLowerCase()) != -1;
+    });
   },
   parse: function(response) {
     var collection = [];
