@@ -4,6 +4,7 @@ from tastypie.api import Api
 from django.contrib import admin
 from Course.api import EnrollmentResource
 
+from Course.views import *
 
 admin.autodiscover()
 
@@ -12,8 +13,8 @@ v1_api.register(EnrollmentResource())
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', TemplateView.as_view(template_name="index.html")),
-	
+    # url(r'^$', TemplateView.as_view(template_name="index.html")),
+    url(r'^$', signup),
     url(r'^api/', include(v1_api.urls)),
     # url(r'^$', 'CourseDeadlines.views.home', name='home'),
     # url(r'^CourseDeadlines/', include('CourseDeadlines.foo.urls')),
@@ -25,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^openid/', include('django_openid_auth.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
-	url(r'^charts/', TemplateView.as_view(template_name="charts.html"))
+	url(r'^charts/', TemplateView.as_view(template_name="charts.html")),
 
 	
 )

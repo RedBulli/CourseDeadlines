@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="{{ STATIC_URL }}js/destroyCache.js"></script>
+    <link href="{{ STATIC_URL }}less/bootstrap/bootstrap.less" rel="stylesheet/less">
+
+    <script src="{{ STATIC_URL }}js/plugins/jquery.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/underscore.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/json2.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/backbone.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/backbone-relational.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/backbone-tastypie.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/handlebars.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/less.min.js"></script>
+    <script src="{{ STATIC_URL }}js/plugins/bootstrap.min.js"></script>
+
+    <script src="{{ STATIC_URL }}js/models.js"></script>
+    <script src="{{ STATIC_URL }}js/views.js"></script>
+
+    
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+    
+</html>

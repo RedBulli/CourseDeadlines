@@ -1,31 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Course Deadlines</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block title %}Course Deadlines{% endblock %}
 
-  <script src="{{ STATIC_URL }}js/destroyCache.js"></script>
-  <link href="{{ STATIC_URL }}less/bootstrap/bootstrap.less" rel="stylesheet/less">
+{% block content %}
 
-  <script src="{{ STATIC_URL }}js/plugins/jquery.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/underscore.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/json2.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/backbone.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/backbone-relational.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/backbone-tastypie.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/handlebars.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/less.min.js"></script>
-  <script src="{{ STATIC_URL }}js/plugins/bootstrap.min.js"></script>
-
-  <script src="{{ STATIC_URL }}js/models.js"></script>
-  <script src="{{ STATIC_URL }}js/views.js"></script>
   {% if user.is_authenticated %}
-  <script src="{{ STATIC_URL }}js/app.js"></script>
+    <script src="{{ STATIC_URL }}js/app.js"></script>
   {% endif %}
-  
-</head>
-<body>
+
   {% include "js_templates/course_list.html" %}
   {% include "js_templates/course_search_list.html" %}
   <header>
@@ -39,7 +20,11 @@
   <ul id="courseList">
   </ul>
   <aside>
-    Other info
+    Other info <br>
+    mail: {{ user.email }} <br>
+    notifyEmail: {{ notifyEmail }} <br>
+    notifications: {{ notifications }}
+    
   </aside>
   <a href="#newCourseModal" role="button" class="btn" data-toggle="modal">Add course</a>
   <div id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -61,5 +46,5 @@
   {% else %}
   <a href="/openid/login">Login using Google</a>
   {% endif %}
-</body>
-</html>
+  
+{% endblock %}
