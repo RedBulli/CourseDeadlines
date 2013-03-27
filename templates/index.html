@@ -41,7 +41,7 @@
   <aside>
     Other info
   </aside>
-  <a href="#newCourseModal" role="button" class="btn" data-toggle="modal">Add course</a>
+  <a href="#newCourseModal" id="newCourseButton" role="button" data-toggle="modal">Add course</a>
   <div id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <header>
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -55,7 +55,7 @@
       </ul>
     </div>
     <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button id="closePopupButton" data-dismiss="modal" aria-hidden="true">Close</button>
     </div>
   </div>
   {% else %}
