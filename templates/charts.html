@@ -1,0 +1,33 @@
+﻿<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('date', 'date');
+		data.addColumn('number', 'deadlines');
+		data.addColumn('number', 'workload');
+		data.addRows([
+		 [new Date(2013, 3, 25), 2, 10],
+		 [new Date(2013, 3, 28), 4, 15],
+		 [new Date(2013, 3, 29), 3, 18],
+	     [new Date(2013, 4, 06), 5, 13],
+         [new Date(2013, 4, 28), 2, 17]
+        ]);
+
+        var options = {
+          title: 'Course Work Load',
+		  isStacked: true 
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </body>
+</html>
