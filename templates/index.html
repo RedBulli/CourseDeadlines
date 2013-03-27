@@ -10,13 +10,13 @@
   {% include "js_templates/course_list.html" %}
   {% include "js_templates/course_search_list.html" %}
   <header>
-    <h1>Course Deadlines</h1>
 	{% if user.is_authenticated %}
 	<div id="login">
 		{{ user.email }}
 		<a href="/logout">Logout</a>
 	</div>
 	{% endif %}
+    <h1>Course Deadlines</h1>
     <nav>
     </nav>
   </header>
