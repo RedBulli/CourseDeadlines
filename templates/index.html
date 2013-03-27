@@ -11,12 +11,17 @@
   {% include "js_templates/course_search_list.html" %}
   <header>
     <h1>Course Deadlines</h1>
+	{% if user.is_authenticated %}
+	<div id="login">
+		{{ user.email }}
+		<a href="/logout">Logout</a>
+	</div>
+	{% endif %}
     <nav>
     </nav>
   </header>
   {% if user.is_authenticated %}
   <h2>Courses I'm taking</h2>
-  Loggeg with: {{ user.email }}. <a href="/logout">Logout</a>
   <ul id="courseList">
   </ul>
   <aside>
