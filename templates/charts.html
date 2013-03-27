@@ -2,27 +2,29 @@
   <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	    <script type="text/javascript">
+		
       google.load("visualization", "1", {packages:["corechart"]});
+	   google.load("visualization", "1", {packages:["annotatedtimeline"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
 		var data = new google.visualization.DataTable();
 		data.addColumn('date', 'date');
-		data.addColumn('number', 'deadlines');
 		data.addColumn('number', 'workload');
+		data.addColumn('string', 'Title');
 		data.addRows([
-		 [new Date(2013, 3, 25), 2, 10],
-		 [new Date(2013, 3, 28), 4, 15],
-		 [new Date(2013, 3, 29), 3, 18],
-	     [new Date(2013, 4, 06), 5, 13],
-         [new Date(2013, 4, 28), 2, 17]
+		 [new Date(2013, 3, 25), 10, 'tfy-3.1253 tentti'],
+		 [new Date(2013, 3, 28), 15, 'T-106.1200 tentti'],
+		 [new Date(2013, 3, 29), 18, 'Mat-1.5413 Välikoe'],
+	     [new Date(2013, 4, 06), 13, 'Tik.Kand palautus V2'],
+         [new Date(2013, 4, 28), 17, 'T-111.5360 DEMO']
         ]);
 
         var options = {
           title: 'Course Work Load',
-		  isStacked: true 
+		  displayAnnotations: true
         };
 
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
     </script>
