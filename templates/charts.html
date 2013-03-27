@@ -4,27 +4,47 @@
 	    <script type="text/javascript">
 		
       google.load("visualization", "1", {packages:["corechart"]});
-	   google.load("visualization", "1", {packages:["annotatedtimeline"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
 		var data = new google.visualization.DataTable();
 		data.addColumn('date', 'date');
 		data.addColumn('number', 'workload');
-		data.addColumn('string', 'Title');
-		data.addRows([
-		 [new Date(2013, 3, 25), 10, 'tfy-3.1253 tentti'],
-		 [new Date(2013, 3, 28), 15, 'T-106.1200 tentti'],
-		 [new Date(2013, 3, 29), 18, 'Mat-1.5413 Välikoe'],
-	     [new Date(2013, 4, 06), 13, 'Tik.Kand palautus V2'],
-         [new Date(2013, 4, 28), 17, 'T-111.5360 DEMO']
+		var counter = 0;
+		dateCounter = 1;
+		monthCounter = 3;
+		for(var i = 0; i< 30; i++){
+			counter++;
+			dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
+			if(dateCounter>30){
+				dateCounter = dateCounter -30;
+				monthCounter++;
+			}
+			console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
+			data.addRows([[new Date(2013, monthCounter, dateCounter), counter]]);
+		}
+		/*data.addRows([
+		 [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti'],
+		 [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti II'],
+		 [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti III'],
+		 [new Date(2013, 3, 26), 1, 'T-106.1200 tentti'],
+		 [new Date(2013, 3, 26), 1, 'T-75.4236 tentti'],
+		 [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+		 [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+	     [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+	     [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+		 [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+	     [new Date(2013, 4, 06), 1, 'Tik.Kand palautus V2'],
+         [new Date(2013, 4, 12), 1, 'T-111.5360 DEMO']
         ]);
+		*/
 
+		
         var options = {
           title: 'Course Work Load',
 		  displayAnnotations: true
         };
 
-        var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
         chart.draw(data, options);
       }
     </script>
