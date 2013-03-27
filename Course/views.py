@@ -21,7 +21,7 @@ def signup(request):
             if notifyEmail:
                 user_profile = UserProfile.objects.create_profile(user, notifyEmail, notifications)
             else:
-                notifyEmail = user_profile.email
+                notifyEmail = user.email
                 user_profile = UserProfile.objects.create_profile(user, notifyEmail, notifications)
             return render(request, "index.html", {"name" : user.username, "email" : user.email, "notifyEmail" : notifyEmail, "notifications" : notifications})
         

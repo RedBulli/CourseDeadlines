@@ -6,12 +6,9 @@
 <h2>Email for notifications</h2>
 <p>Provide an email for notifications. If left blank, your Gmail address will be used</p>
 
-{{ name }}
-{{ email }}
-
 <form class="first_login" action="{% url 'Course.views.signup' %}" method="post">{% csrf_token %}
     <div class="control-group">
-        <input type="text" placeholder="Notification Email" name="notifyEmail">
+        <input type="text" placeholder="{{ email }}" name="notifyEmail">
     </div>
     <!--
     <div class="btn-group" data-toggle="buttons-checkbox">
