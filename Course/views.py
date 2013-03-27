@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404, render
 from models import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.shortcuts import redirect
 
 from django.db import IntegrityError
 
@@ -21,10 +22,9 @@ def signup(request):
             if notifyEmail:
                 user_profile = UserProfile.objects.create_profile(user, notifyEmail, notifications)
             else:
-                notifyEmail = user.email
                 user_profile = UserProfile.objects.create_profile(user, notifyEmail, notifications)
-            return render(request, "index.html", {"name" : user.username, "email" : user.email, "notifyEmail" : notifyEmail, "notifications" : notifications})
-        
+            return HttpResponseRedirect("/")
+            
         try: #not first time
             user_profile = request.user.get_profile()
             notifyEmail = user_profile.notifyEmail
