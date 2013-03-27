@@ -2,6 +2,17 @@
 {% block title %}Login to CourseDeadlines{% endblock %}
 
 {% block content %}
+  <header>
+	{% if user.is_authenticated %}
+	<div id="login">
+		{{ user.email }}
+		<a href="/logout">Logout</a>
+	</div>
+	{% endif %}
+    <h1>Course Deadlines</h1>
+    <nav>
+    </nav>
+  </header>
 <!-- form giving the possibility to add email -->
 <h2>Email for notifications</h2>
 <p>Provide an email for notifications. If left blank, your Gmail address will be used</p>
