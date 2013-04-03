@@ -35,12 +35,17 @@
   <div id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <header>
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel">Add new course</h3>
-    </header>
-    <div class="modal-body">
-      <input type="search" id="courseNameSearch" name="name" list="courseDatalist"/>
+      <h3>Add new course</h3>
+      <form id="courseSearchForm" class="form-search">
+        <div class="input-append">
+          <input type="search" class="search-query" id="courseNameSearch" placeholder="Search" list="courseDatalist">
+          <button type="submit"><i class="icon-search"></i></button>
+        </div>
+      </form>
       <datalist id="courseDatalist">
       </datalist>
+    </header>
+    <div class="modal-body">
       <ul id="searchResults">
       </ul>
     </div>
