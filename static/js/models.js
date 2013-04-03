@@ -65,7 +65,9 @@ var NoppaCourses = Backbone.Collection.extend({
         allCourses.update(collection.models, {remove: false});
         allCourses.trigger('update');
         _this.searches[name] = collection.models;
-        _this.trigger('render');
+        if (name === latestSearch) {
+          _this.trigger('render');
+        }
       };
       return Backbone.Collection.prototype.fetch.call(this, options);
     }
