@@ -1,68 +1,64 @@
 ﻿<html>
   <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	    <script type="text/javascript">
-		
+    <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
-		var data = new google.visualization.DataTable();
-		data.addColumn('date', 'date');
-		data.addColumn('number', 'tfy-3.1253');
-		data.addColumn('number', 'mat-125.4254');
-		data.addColumn('number', 't-106.1200');
-		data.addColumn('number', 'tik.kand');
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'date');
+        data.addColumn('number', 'tfy-3.1253');
+        data.addColumn('number', 'mat-125.4254');
+        data.addColumn('number', 't-106.1200');
+        data.addColumn('number', 'tik.kand');
 
-		var counter = 0;
-		dateCounter = 1;
-		monthCounter = 3;
-		for(var i = 0; i< 30; i++){
-			courseSelector = Math.floor((Math.random()*4)+1);
-			counter++;
-			dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
-			switch(courseSelector){
-				case 1:
-					data.addRows([[new Date(2013, monthCounter, dateCounter), counter, undefined, undefined, undefined]]);
-					console.log('case 1');
-				case 2:
-					data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, counter, undefined, undefined]]);
-					console.log('case 2');
-				case 3: 
-					data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, undefined, counter, undefined]]);
-					console.log('case 3');
-				case 4:
-					data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, undefined, undefined, counter]]);
-					console.log('case 4');
-			}
-			
-			
-			
-			if(dateCounter>30){
-				dateCounter = dateCounter -30;
-				monthCounter++;
-			}
-			console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
-		}
-		/*data.addRows([
-		 [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti'],
-		 [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti II'],
-		 [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti III'],
-		 [new Date(2013, 3, 26), 1, 'T-106.1200 tentti'],
-		 [new Date(2013, 3, 26), 1, 'T-75.4236 tentti'],
-		 [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-		 [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-	     [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-	     [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-		 [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-	     [new Date(2013, 4, 06), 1, 'Tik.Kand palautus V2'],
-         [new Date(2013, 4, 12), 1, 'T-111.5360 DEMO']
+        var counter = 0;
+        dateCounter = 1;
+        monthCounter = 3;
+        for(var i = 0; i< 30; i++){
+          courseSelector = Math.floor((Math.random()*4)+1);
+          counter++;
+          dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
+          switch(courseSelector){
+            case 1:
+              data.addRows([[new Date(2013, monthCounter, dateCounter), counter, undefined, undefined, undefined]]);
+              console.log('case 1');
+            case 2:
+              data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, counter, undefined, undefined]]);
+              console.log('case 2');
+            case 3: 
+              data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, undefined, counter, undefined]]);
+              console.log('case 3');
+            case 4:
+              data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, undefined, undefined, counter]]);
+              console.log('case 4');
+          }
+
+        if(dateCounter>30){
+          dateCounter = dateCounter -30;
+          monthCounter++;
+        }
+        console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
+        }
+        /*data.addRows([
+        [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti'],
+        [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti II'],
+        [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti III'],
+        [new Date(2013, 3, 26), 1, 'T-106.1200 tentti'],
+        [new Date(2013, 3, 26), 1, 'T-75.4236 tentti'],
+        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
+        [new Date(2013, 4, 06), 1, 'Tik.Kand palautus V2'],
+        [new Date(2013, 4, 12), 1, 'T-111.5360 DEMO']
         ]);
-		*/
+        */
 
-		
         var options = {
           title: 'Course Work Load',
-		  displayAnnotations: true
+          displayAnnotations: true
         };
 
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));

@@ -3,12 +3,12 @@
 
 {% block content %}
   <header>
-	{% if user.is_authenticated %}
-	<div id="login">
-		{{ user.email }}
-		<a href="/logout">Logout</a>
-	</div>
-	{% endif %}
+    {% if user.is_authenticated %}
+    <div id="login">
+      {{ user.email }}
+      <a href="/logout">Logout</a>
+    </div>
+    {% endif %}
     <h1>Course Deadlines</h1>
     <nav>
     </nav>
