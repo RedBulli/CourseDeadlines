@@ -11,4 +11,5 @@ function destroyLessCache(pathToCss) { // e.g. '/css/' or '/stylesheets/'
     }
   }
 }
-destroyLessCache('/static/SnookerStats/less/');
+destroyLessCache('/static/less/');
+destroyLessCache('/static/CourseDeadlines/less/');
