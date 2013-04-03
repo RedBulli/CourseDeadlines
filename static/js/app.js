@@ -6,7 +6,6 @@ var searchCourses;
 var organizations = [];
 
 $(document).ready(function() {
-  //fetchAllCourses();
   addBootstrapClasses();
   initializeCourseEnrollments();
   initializeNoppaCourses();
@@ -50,15 +49,19 @@ function bindUiActions() {
   $('#courseNameSearch').bind('input', function(event) {
     var searchValue = $(this).val();
     if (searchValue.length > 2) {
-      searchCourses.search($(this).val(), allCourses);
+      courseNameSearch();
     }
   });
   $('#courseNameSearch').keypress(function(e) {
     if(e.which == 13) {
       e.preventDefault();
-      searchCourses.search($(this).val(), allCourses);
+      courseNameSearch();
     }
-});
+  });
+}
+
+function courseNameSearch() {
+  searchCourses.search($('#courseNameSearch').val(), allCourses);
 }
 
 function addBootstrapClasses() {
@@ -66,6 +69,6 @@ function addBootstrapClasses() {
   $('#courseSearchForm button').addClass('btn');
   $('#courseSearchForm button').click(function(e) {
     e.preventDefault();
-    alert(1);
+    courseNameSearch();
   });
 }
