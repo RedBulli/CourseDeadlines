@@ -19,13 +19,8 @@
 
 <form class="first_login" action="{% url 'Course.views.signup' %}" method="post">{% csrf_token %}
     <div class="control-group">
-        <input type="text" placeholder="{{ email }}" name="notifyEmail">
+        <input type="text" placeholder="{{ user.email }}" name="notifyEmail">
     </div>
-    <!--
-    <div class="btn-group" data-toggle="buttons-checkbox">
-        <button type="button" name="notifications-b" value="Allow" class="btn btn-primary">Allow notifications</button>
-    </div>
-    -->
     <label class="checkbox">
       <input type="checkbox" name="notifications" value="Allow"> Allow email notifications
     </label>

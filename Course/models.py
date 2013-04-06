@@ -15,16 +15,17 @@ class Enrollment(models.Model):
     def save(self):
         self.full_clean()
         super(Enrollment, self).save()
-        
 
-class userProfileManager(models.Manager):
-    def create_profile(self, user, notifyEmail, notifications):
-        userProfile = self.create(user=user, notifyEmail = notifyEmail, notifications = notifications)
-        return userProfile
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, unique=True)
-    notifyEmail = models.EmailField("notifyemail", blank=True)
-    notifications = models.BooleanField(default='True')
+    user = models.OneToOneField(User)
+    notify_email = models.EmailField(null=True, blank=True)
+    notifications = models.BooleanField()
     
-    objects = userProfileManager()
+    def __unicode__(self):
+        return u'%s' % (self.user)
+
+def get_profile(self):
+    return UserProfile.objects.get(user=self)
+
+User.add_to_class('get_profile', get_profile)

@@ -176,5 +176,3 @@ LOGGING = {
     }
 }
 
-
-AUTH_PROFILE_MODULE = "Course.UserProfile"

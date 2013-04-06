@@ -12,7 +12,7 @@
   <header>
   {% if user.is_authenticated %}
   <div id="login">
-    {{ user.email }}
+    <a href="{% url 'Course.views.settings' %}">{{ user.email }}</a>
     <a href="/logout">Logout</a>
   </div>
   {% endif %}
@@ -24,13 +24,6 @@
   <h2>Courses I'm taking</h2>
   <ul id="courseList">
   </ul>
-  <aside>
-    Other info <br>
-    mail: {{ user.email }} <br>
-    notifyEmail: {{ notifyEmail }} <br>
-    notifications: {{ notifications }}
-    
-  </aside>
   <a href="#newCourseModal" id="newCourseButton" role="button" data-toggle="modal">Add course</a>
   <div id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <header>

@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', TemplateView.as_view(template_name="index.html")),
     url(r'^$', signup),
+    url(r'^settings', settings),
     url(r'^api/', include(v1_api.urls)),
     # url(r'^$', 'CourseDeadlines.views.home', name='home'),
     # url(r'^CourseDeadlines/', include('CourseDeadlines.foo.urls')),

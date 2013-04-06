@@ -16,24 +16,37 @@ def signup(request):
         
         if (request.method == "POST"):
             notifyEmail = request.POST.get("notifyEmail")
-            notifications = True
-            if not request.POST.get("notifications") == "Allow":
-                notifications = False
-            if notifyEmail:
-                user_profile = UserProfile.objects.create_profile(user, notifyEmail, notifications)
+            if not request.POST.get("settings"):
+                user_profile = UserProfile()
+                user_profile.user = user
             else:
-                user_profile = UserProfile.objects.create_profile(user, notifyEmail, notifications)
+                user_profile = request.user.get_profile()
+            if notifyEmail:
+                user_profile.notify_email = notifyEmail
+            else:
+                user_profile.notify_email = user.email
+            if not request.POST.get("notifications") == "Allow":
+                user_profile.notifications = False
+            else:
+                user_profile.notifications = True
+            user_profile.save()
             return HttpResponseRedirect("/")
             
-        try: #not first time
+        try:
             user_profile = request.user.get_profile()
-            notifyEmail = user_profile.notifyEmail
-            return render(request, "index.html", {"name" : user.username, "email" : user.email, "notifyEmail" : notifyEmail})
-        except UserProfile.DoesNotExist: #first time
-            return render(request, "firstLogin.html", {"name" : user.username, "email" : user.email})
+            return render(request, "index.html", {"user_profile" : user_profile})
+        except UserProfile.DoesNotExist:
+            return render(request, "firstLogin.html")
                 
         
     return render(request, "index.html")
-       
 
+def settings(request):
+    user = request.user
+    if user.is_authenticated():
+        user_profile = request.user.get_profile()
+        return render(request, "settings.html", {"user_profile" : user_profile})
+    else:
+        raise Http404
         
+    
