@@ -15,23 +15,35 @@
         var counter = 0;
         dateCounter = 1;
         monthCounter = 3;
+		var alphaCounter = 0;
+		var betaCounter = 0;
+		var gammaCounter = 0;
+		var deltaCounter = 0;
         for(var i = 0; i< 30; i++){
           courseSelector = Math.floor((Math.random()*4)+1);
           counter++;
           dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
           switch(courseSelector){
             case 1:
-              data.addRows([[new Date(2013, monthCounter, dateCounter), counter, undefined, undefined, undefined]]);
+			  alphaCounter++;
+              data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
               console.log('case 1');
+			  break;
             case 2:
-              data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, counter, undefined, undefined]]);
+              betaCounter++;
+			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
               console.log('case 2');
+			  break;
             case 3: 
-              data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, undefined, counter, undefined]]);
+              gammaCounter++;
+			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
               console.log('case 3');
+			  break;
             case 4:
-              data.addRows([[new Date(2013, monthCounter, dateCounter), undefined, undefined, undefined, counter]]);
+              deltaCounter++;
+			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
               console.log('case 4');
+			  break;
           }
 
         if(dateCounter>30){
@@ -58,6 +70,7 @@
 
         var options = {
           title: 'Course Work Load',
+		  isStacked: true,
           displayAnnotations: true
         };
 
