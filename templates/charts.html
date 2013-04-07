@@ -1,17 +1,36 @@
 ﻿<html>
   <head>
+	
+  
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
+      google.setOnLoadCallback(drawLineChart);
+	  
+	  function drawChart() {
+	  	var mylist=document.getElementById("myList");
+	    var selectedValue = mylist.options[mylist.selectedIndex].text;
+		if (selectedValue == 'Continuous'){
+			this.drawLineChart();
+		}
+		else {
+			this.drawColumnChart();
+		}
+		}
+	  
+      function drawLineChart() {
+	  
+	  
+		var mylist=document.getElementById("myList");
+		console.log('mylist is: ' + mylist);
+		var selectedValue = mylist.options[mylist.selectedIndex].text;
+		
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'date');
         data.addColumn('number', 'tfy-3.1253');
         data.addColumn('number', 'mat-125.4254');
         data.addColumn('number', 't-106.1200');
         data.addColumn('number', 'tik.kand');
-
         var counter = 0;
         dateCounter = 1;
         monthCounter = 3;
@@ -42,7 +61,7 @@
             case 4:
               deltaCounter++;
 			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
-              console.log('case 4');
+			  console.log('case 4');
 			  break;
           }
 
@@ -52,34 +71,106 @@
         }
         console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
         }
-        /*data.addRows([
-        [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti'],
-        [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti II'],
-        [new Date(2013, 3, 25), 1, 'tfy-3.1253 tentti III'],
-        [new Date(2013, 3, 26), 1, 'T-106.1200 tentti'],
-        [new Date(2013, 3, 26), 1, 'T-75.4236 tentti'],
-        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-        [new Date(2013, 3, 28), 1, 'Mat-1.5413 Välikoe'],
-        [new Date(2013, 4, 06), 1, 'Tik.Kand palautus V2'],
-        [new Date(2013, 4, 12), 1, 'T-111.5360 DEMO']
-        ]);
-        */
+        var options = {
+          title: 'Course Work Load',
+		  isStacked: true,
+          displayAnnotations: true
+        };
+	
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+		}
+		
+		
+		
+		/*
+		* Draws a column Chart
+		*/
+		
+		function drawColumnChart() {
+		var mylist=document.getElementById("myList");
+		console.log('mylist is: ' + mylist);
+		var selectedValue = mylist.options[mylist.selectedIndex].text;
+		
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'week');
+        data.addColumn('number', 'tfy-3.1253');
+        data.addColumn('number', 'mat-125.4254');
+        data.addColumn('number', 't-106.1200');
+        data.addColumn('number', 'tik.kand');
+        dateCounter = 1;
+        monthCounter = 3;
+		var alphaCounter = 0;
+		var betaCounter = 0;
+		var gammaCounter = 0;
+		var deltaCounter = 0;
+		var previousWeek = 0;
+        for(var i = 0; i< 30; i++){
+			courseSelector = Math.floor((Math.random()*4)+1);
+			dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
+			var date = new Date(2013, monthCounter, dateCounter);
+			var week = date.getWeek();
+			if (week > previousWeek){
+				previousWeek = week;
+				var alphaCounter = 0;
+				var betaCounter = 0;
+				var gammaCounter = 0;
+				var deltaCounter = 0;
+			}
+        switch(courseSelector){
+            case 1:
+			  alphaCounter++;
+              data.addRows([[week , alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+              console.log('case 1');
+			  break;
+            case 2:
+              betaCounter++;
+			  data.addRows([[week, alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+              console.log('case 2');
+			  break;
+            case 3: 
+              gammaCounter++;
+			  data.addRows([[week, alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+              console.log('case 3');
+			  break;
+            case 4:
+              deltaCounter++;
+			  data.addRows([[week, alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+			  console.log('case 4');
+			  break;
+        }
+
+        if(dateCounter>30){
+          dateCounter = dateCounter -30;
+          monthCounter++;
+        }
+        }
+		
 
         var options = {
           title: 'Course Work Load',
 		  isStacked: true,
           displayAnnotations: true
         };
-
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+	
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
         chart.draw(data, options);
-      }
+}
+
+	Date.prototype.getWeek = function() {
+		var onejan = new Date(this.getFullYear(),0,1);
+		return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
+	}
     </script>
   </head>
   <body>
+  <form>
+		Select the workload presentation
+		<select id="myList" onchange="drawChart()">
+			<option>Continuous</option>
+			<option>Weekly</option>  
+		</select>
+	</form>
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
   </body>
 </html>
