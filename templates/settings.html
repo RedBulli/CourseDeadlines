@@ -6,7 +6,7 @@
     {% if user.is_authenticated %}
     <div id="login">
         <a href="{% url 'Course.views.settings' %}">{{ user.email }}</a>
-        <a href="/logout">Logout</a>
+        <a id="logoutButton" href="/logout">Logout</a>
     </div>
     {% endif %}
     <h1>Course Deadlines - Settings</h1>
@@ -14,6 +14,7 @@
     </nav>
   </header>
 
+<div id="content">
 <h2>Settings</h2>
 <p>Change your notification email here</p>
 
@@ -30,5 +31,5 @@
     
 
 </form>
-
+</div>
 {% endblock %}
