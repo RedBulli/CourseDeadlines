@@ -13,18 +13,20 @@
   {% if user.is_authenticated %}
   <div id="login">
     <a href="{% url 'Course.views.settings' %}">{{ user.email }}</a>
-    <a href="/logout">Logout</a>
+    <a id="logoutButton" href="/logout">Logout</a>
   </div>
   {% endif %}
     <h1>Course Deadlines</h1>
     <nav>
     </nav>
   </header>
+  <div id="content">
   {% if user.is_authenticated %}
   <h2>Courses I'm taking</h2>
   <ul id="courseList">
   </ul>
   <a href="#newCourseModal" id="newCourseButton" role="button" data-toggle="modal">Add course</a>
+  </div>
   <div id="newCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <header>
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -47,7 +49,7 @@
     </div>
   </div>
   {% else %}
-  <a href="/openid/login">Login using Google</a>
+  <a id="loginButton" href="/openid/login">Login using Google</a>
+  </div>
   {% endif %}
-  
 {% endblock %}

@@ -1,22 +1,48 @@
-#newCourseButton, #closePopupButton, #firstLoginButton, .attendCourse {
+#newCourseButton, #closePopupButton, #firstLoginButton, .attendCourse, #loginButton, #logoutButton {
   .btn;
 }
 
 header {
+	padding-left: 10px;
+	padding-right: 10px;
+	background: -prefix-linear-gradient(top, #54b4eb,#2fa4e7);
+	background: -webkit-gradient(linear, left top, left bottom, from(#54b4eb), to(#2fa4e7));
+	background: -moz-linear-gradient(top, #54b4eb,#2fa4e7);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#54b4eb, endColorstr=#2fa4e7);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#54b4eb, endColorstr=#2fa4e7)";
+	border-bottom: 1px solid #ddd;
+	h1 {
+		margin-top: 0px;
+    color: white;
+	}
+  h3 {
+    color: white;
+  }
+	#login {
+		float: right;
+    color: white;
+    a:first-of-type {
+      color: white;
+    }
+	}
+}
+
+#content {
   padding-left: 10px;
-  padding-right: 10px;
-  background: -prefix-linear-gradient(top, #FAFDFF, #D5D5D5);
-  background: -webkit-gradient(linear, left top, left bottom, from(#FAFDFF), to(#D5D5D5));
-  background: -moz-linear-gradient(top, #FAFDFF, #D5D5D5);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#FAFDFF, endColorstr=#D5D5D5);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#FAFDFF, endColorstr=#D5D5D5)";
-  border-bottom: 1px solid #ddd;
-  h1 {
-    margin-top: 0px;
+	padding-right: 10px;
+  text-align: center;
+  #courseList {
+    text-align: left;
+    list-style-type: none;
   }
-  #login {
-    float: right;
+  #loginButton {
+    margin-top: 20px;
   }
+}
+
+#newCourseButton {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #newCourseModal {
