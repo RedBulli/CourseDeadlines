@@ -6,15 +6,34 @@
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawLineChart);
+	          var data;
 	  
 	  function drawChart() {
 	  	var mylist=document.getElementById("myList");
 	    var selectedValue = mylist.options[mylist.selectedIndex].text;
+		var rangeSelectionList=document.getElementById("rangeSelectionList");
+	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].text;
 		if (selectedValue == 'Continuous'){
-			this.drawLineChart();
+			this.drawLineChart(selectedDate, false);
 		}
 		else {
-			this.drawColumnChart();
+			this.drawColumnChart(selectedDate, false);
+		}
+		
+
+		
+		}
+	  
+	  function drawSameChart() {
+	  	var mylist=document.getElementById("myList");
+	    var selectedValue = mylist.options[mylist.selectedIndex].text;
+		var rangeSelectionList=document.getElementById("rangeSelectionList");
+	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].text;
+		if (selectedValue == 'Continuous'){
+			this.drawLineChart(selectedDate, true);
+		}
+		else {
+			this.drawColumnChart(selectedDate, true);
 		}
 		
 		var rangeSelectionList=document.getElementById("rangeSelectionList");
@@ -22,10 +41,11 @@
 		
 		}
 	  
-      function drawLineChart(dateRange) {	  
+      function drawLineChart(dateRange, useOldData) {	  
 		var mylist=document.getElementById("myList");
 		console.log('mylist is: ' + mylist);
 		
+		if(!useOldData){
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'date');
         data.addColumn('number', 'tfy-3.1253');
@@ -72,6 +92,7 @@
         }
         console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
         }
+		}
         var options = {
 			title: 'Course Work Load',
 			isStacked: true,
@@ -95,7 +116,7 @@
 		* Draws a column Chart
 		*/
 		
-		function drawColumnChart(dateRange) {
+		function drawColumnChart(dateRange, useOldData) {
 		var mylist=document.getElementById("myList");
 		console.log('mylist is: ' + mylist);
 		
@@ -181,7 +202,7 @@
    
    <form>
 		Select the workload presentation
-		<select id="rangeSelectionList" onchange="drawChart()">
+		<select id="rangeSelectionList" onchange="drawSameChart()">
 			<option>Week</option>
 			<option>Month</option>
 			<option>3 Months</option>
