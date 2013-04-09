@@ -49,4 +49,11 @@ def settings(request):
     else:
         raise Http404
         
-    
+
+def chart(request):
+    user = request.user
+    if user.is_authenticated():
+        user_profile = request.user.get_profile()
+        return render(request, "charts.html", {"user_profile" : user_profile})
+    else:
+        raise Http404

@@ -1,7 +1,7 @@
-﻿<html>
-  <head>
-	
-  
+﻿{% extends "base.html" %}
+{% block title %}Course Deadlines{% endblock %}
+
+{% block header %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
@@ -192,26 +192,35 @@
 		return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
 	}
     </script>
-  </head>
-  <body>
+{% endblock %}
+{% block content %}
+  <header>
+  {% if user.is_authenticated %}
+  <div id="login">
+    <a href="{% url 'Course.views.settings' %}">{{ user.email }}</a>
+    <a id="logoutButton" href="/logout">Logout</a>
+  </div>
+  {% endif %}
+    <h1>Course Deadlines</h1>
+    <nav>
+    </nav>
+  </header>
+  <div id="content">
   <form>
-		Select the workload presentation
+		<p>Select the workload presentation
 		<select id="myList" onchange="drawChart()">
 			<option>Continuous</option>
 			<option>Weekly</option>  
-		</select>
-   </form>
-   
-   <form>
-		Select the workload presentation
+		</select></p>
+		<p>Select the workload presentation
 		<select id="rangeSelectionList" onchange="drawSameChart()">
 			<option>Week</option>
 			<option>Month</option>
 			<option>3 Months</option>
 			<option>Year</option>
-		</select>
+		</select></p>
 	</form>
    
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
-  </body>
-</html>
+  </div>
+{% endblock %}

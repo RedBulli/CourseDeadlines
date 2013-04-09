@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^openid/', include('django_openid_auth.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
-	url(r'^charts/', TemplateView.as_view(template_name="charts.html")),
+	url(r'^charts/', chart),
 
 	
 )
