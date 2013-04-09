@@ -16,14 +16,15 @@
 		else {
 			this.drawColumnChart();
 		}
+		
+		var rangeSelectionList=document.getElementById("rangeSelectionList");
+	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].text;
+		
 		}
 	  
-      function drawLineChart() {
-	  
-	  
+      function drawLineChart(dateRange) {	  
 		var mylist=document.getElementById("myList");
 		console.log('mylist is: ' + mylist);
-		var selectedValue = mylist.options[mylist.selectedIndex].text;
 		
         var data = new google.visualization.DataTable();
         data.addColumn('date', 'date');
@@ -44,37 +45,44 @@
           dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
           switch(courseSelector){
             case 1:
-			  alphaCounter++;
-              data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
-              console.log('case 1');
-			  break;
+			    alphaCounter++;
+                data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+                console.log('case 1');
+			    break;
             case 2:
-              betaCounter++;
-			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
-              console.log('case 2');
-			  break;
+                betaCounter++;
+			    data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+                console.log('case 2');
+			    break;
             case 3: 
-              gammaCounter++;
-			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
-              console.log('case 3');
-			  break;
+                gammaCounter++;
+			    data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+                console.log('case 3');
+			    break;
             case 4:
-              deltaCounter++;
-			  data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
-			  console.log('case 4');
-			  break;
+                deltaCounter++;
+			    data.addRows([[new Date(2013, monthCounter, dateCounter), alphaCounter, betaCounter, gammaCounter, deltaCounter]]);
+			    console.log('case 4');
+			    break;
           }
 
         if(dateCounter>30){
-          dateCounter = dateCounter -30;
-          monthCounter++;
+			dateCounter = dateCounter -30;
+			monthCounter++;
         }
         console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
         }
         var options = {
-          title: 'Course Work Load',
-		  isStacked: true,
-          displayAnnotations: true
+			title: 'Course Work Load',
+			isStacked: true,
+			displayAnnotations: true,
+			hAxis: {
+				viewWindowMode: 'explicit',
+				viewWindow: {
+					min: new Date(2007,1,1),
+                    max: new Date(2010,1,1)
+					}
+				}
         };
 	
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
@@ -87,10 +95,9 @@
 		* Draws a column Chart
 		*/
 		
-		function drawColumnChart() {
+		function drawColumnChart(dateRange) {
 		var mylist=document.getElementById("myList");
 		console.log('mylist is: ' + mylist);
-		var selectedValue = mylist.options[mylist.selectedIndex].text;
 		
         var data = new google.visualization.DataTable();
         data.addColumn('number', 'week');
@@ -170,7 +177,18 @@
 			<option>Continuous</option>
 			<option>Weekly</option>  
 		</select>
+   </form>
+   
+   <form>
+		Select the workload presentation
+		<select id="rangeSelectionList" onchange="drawChart()">
+			<option>Week</option>
+			<option>Month</option>
+			<option>3 Months</option>
+			<option>Year</option>
+		</select>
 	</form>
+   
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
   </body>
 </html>
