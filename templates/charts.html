@@ -93,6 +93,8 @@
         console.log('month counter: ' + monthCounter + 'date counter: '+dateCounter + 'counter' + counter);
         }
 		}
+		today = New Date();
+		nextRange = new Date(today.getDate()+30);
         var options = {
 			title: 'Course Work Load',
 			isStacked: true,
@@ -100,8 +102,8 @@
 			hAxis: {
 				viewWindowMode: 'explicit',
 				viewWindow: {
-					min: new Date(2007,1,1),
-                    max: new Date(2010,1,1)
+					min: today,
+                    max: nextRange
 					}
 				}
         };
