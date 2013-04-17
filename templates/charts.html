@@ -9,10 +9,35 @@
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
-        var data;
+      var data;
+	  var width = 500;
+
+	  var labelTestData = [
+        {label: "person a", times: [{"starting_time": 1355752800000, "ending_time": 1355759900000}, {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
+        {label: "person b", times: [{"starting_time": 1355759910000, "ending_time": 1355761900000}, ]},
+        {label: "person c", times: [{"starting_time": 1355761910000, "ending_time": 1355763910000}]},
+      ];
 	  
+
 	  
-	function timelineHover() {
+	  function drawChart() {
+	  	var mylist=document.getElementById("myList");
+	    var selectedValue = mylist.options[mylist.selectedIndex].text;
+		var rangeSelectionList=document.getElementById("rangeSelectionList");
+	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].value;
+		console.log('selectedDate: ' + selectedDate);
+		if (selectedValue == 'Continuous'){
+			drawLineChart(selectedDate, false);
+			}
+		else if(selectedValue == 'Timeline'){
+			timelineHover();
+			}
+		else{
+			drawColumnChart(selectedDate, false);
+			}
+		}
+	  
+	  	function timelineHover(){
         var chart = d3.timeline()
           .width(width*4)
           .stack()
@@ -33,29 +58,10 @@
             $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
           });
 
-        var svg = d3.select("#timeline3").append("svg").attr("width", width)
+        var svg = d3.select("#content").append("svg").attr("width", width)
           .datum(labelTestData).call(chart);
     }
 	  
-	  function drawChart() {
-	  	var mylist=document.getElementById("myList");
-	    var selectedValue = mylist.options[mylist.selectedIndex].text;
-		var rangeSelectionList=document.getElementById("rangeSelectionList");
-	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].value;
-		console.log('selectedDate: ' + selectedDate);
-		if (selectedValue == 'Continuous'){
-			this.drawLineChart(selectedDate, false);
-		}
-		else if(selectedValue == 'Timeline'){
-			this.timeLineHover();
-		}
-		else {
-			this.drawColumnChart(selectedDate, false);
-		}
-		
-
-		
-		}
 	  
 	  function drawSameChart() {
 	  	var mylist=document.getElementById("myList");
