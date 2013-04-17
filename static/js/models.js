@@ -7,19 +7,34 @@ var NOPPA_ASSIGNMENT_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 var NOPPA_TEST_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 
 var CourseEnrollment = Backbone.RelationalModel.extend({
-  urlRoot: ENROLLMENTS_ROOT
+  urlRoot: ENROLLMENTS_ROOT,
+  relations: [{
+    type: Backbone.HasOne,
+    key: 'noppa_course',
+    relatedModel: 'NoppaCourse',
+    includeInJSON: 'noppa_course'
+  }],
+  fetchNoppaCourse: function(options) {
+    options || (options = {});
+    options.dataType = 'jsonp';
+    options.data = {key: API_KEY};
+    return this.fetchRelated('noppa_course', options);
+  }
 });
 
 var CourseEnrollments = Backbone.Collection.extend({
   url: ENROLLMENTS_ROOT,
   model: CourseEnrollment,
-  addCourse: function(course_id) {
+  addCourse: function(course_id, callback) {
     var _this = this;
-    var enrollment = new CourseEnrollment({course_id: course_id});
+    var enrollment = new CourseEnrollment({course_id: course_id, noppa_course: course_id});
     enrollment.save(enrollment.attributes, {success: function() {
-      _this.add(enrollment);
+      enrollment.fetchNoppaCourse({success: function() {
+        _this.add(enrollment);
+        _this.trigger('render');
+        callback();
+      }});
     }});
-    this.trigger('render');
   }
 });
 
@@ -36,8 +51,10 @@ var NoppaAssignments = Backbone.Collection.extend({
   }
 });
 
-var NoppaCourse = Backbone.Model.extend({
-  urlRoot: NOPPA_COURSE_ROOT,
+var NoppaCourse = Backbone.RelationalModel.extend({
+  url: function () {
+    return NOPPA_COURSE_ROOT + '/' +this.get('course_id');
+  },
   idAttribute: 'course_id',
   fetchAssignments: function(options) {
     var assignments = new NoppaAssignments();
@@ -46,10 +63,31 @@ var NoppaCourse = Backbone.Model.extend({
   },
 });
 
+var NoppaSearchCourse = Backbone.Model.extend({
+  urlRoot: NOPPA_COURSE_ROOT,
+  idAttribute: 'course_id',
+  customToJSON: function(enrollments) {
+    var json = this.toJSON();
+    var enrolled = false;
+    if (enrollments.where({course_id: this.get('course_id')}).length > 0) {
+      enrolled = true;
+    }
+    json.enrolled = enrolled;
+    return json;
+  }
+});
+
 var NoppaCourses = Backbone.Collection.extend({
-  model: NoppaCourse,
+  model: NoppaSearchCourse,
   urlRoot: NOPPA_COURSE_ROOT,
   searches: {},
+  customToJSON: function(enrollments) {
+    var json = [];
+    this.each(function(course) {
+      json.push(course.customToJSON(enrollments));
+    });
+    return json;
+  },
   search: function(name, allCourses, options) {
     var _this = this;
     if (name.length == 0) {
@@ -69,6 +107,9 @@ var NoppaCourses = Backbone.Collection.extend({
           _this.trigger('render');
         }
       };
+      options.error = function() {
+        console.log("ERRORI");
+      }
       return Backbone.Collection.prototype.fetch.call(this, options);
     }
     else {
@@ -79,10 +120,11 @@ var NoppaCourses = Backbone.Collection.extend({
   parse: function(response) {
     var collection = [];
     $.each(response, function(index, value) {
-      var course = new NoppaCourse(value);
+      var course = new NoppaSearchCourse(value);
       course.id = value.course_id;
       collection.push(course);
     });
     return collection;
   }
 });
+

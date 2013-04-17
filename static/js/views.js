@@ -23,9 +23,13 @@ var CourseSearchListView = Backbone.View.extend({
     this.collection.bind('render', this.render);
   },
   render: function() {
-    this.$el.html(this.template({courses: this.collection.models}));
+    var _this = this;
+    var json = this.collection.customToJSON(courseEnrollments);
+    this.$el.html(this.template({courses: json}));
     $('.attendCourse').click(function() {
-      courseEnrollments.addCourse($(this).val());
+      courseEnrollments.addCourse($(this).val(), function() {
+        _this.render();
+      });
     });
   }
 });

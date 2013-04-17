@@ -1,6 +1,6 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "course_list_tmpl" %}
   {{#courses}}
-    <li>{{attributes.course_id}} <a href="{{id}}" class="removeCourse"><i class="icon-trash"></i></a></li>
+    <li>{{attributes.noppa_course.attributes.course_id}}: {{attributes.noppa_course.attributes.name}} <a href="{{id}}" class="removeCourse"><i class="icon-trash"></i></a></li>
   {{/courses}}
 {% endtplhandlebars %}

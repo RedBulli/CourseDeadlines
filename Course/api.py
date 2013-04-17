@@ -46,6 +46,7 @@ class UserObjectsOnlyAuthorization(Authorization):
 
 class EnrollmentResource(ModelResource):
     course_id = fields.CharField(attribute='course_id')
+    noppa_course = fields.CharField(attribute='course_id')
 
     def obj_create(self, bundle, request=None, **kwargs):
         bundle.obj.user = bundle.request.user

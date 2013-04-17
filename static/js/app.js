@@ -26,22 +26,19 @@ function initializeCourseEnrollments() {
   courseEnrollments = new CourseEnrollments();
   courseEnrollments.fetch({
     success: function(collection) {
-      var courseEnrollmentsView = new CourseEnrollmentsView(
-        {collection: courseEnrollments, el: '#courseList'}
-      );
-      courseEnrollmentsView.render();
-    }
-  });
-}
-
-function initializeCourseEnrollments() {
-  courseEnrollments = new CourseEnrollments();
-  courseEnrollments.fetch({
-    success: function(collection) {
-      var courseEnrollmentsView = new CourseEnrollmentsView(
-        {collection: courseEnrollments, el: '#courseList'}
-      );
-      courseEnrollmentsView.render();
+      var size = collection.size();
+      var callbackCount = 0;
+      collection.each(function(course) {
+        course.fetchNoppaCourse({success: function() {
+          callbackCount++;
+          if (size == callbackCount) {
+            var courseEnrollmentsView = new CourseEnrollmentsView(
+              {collection: courseEnrollments, el: '#courseList'}
+            );
+            courseEnrollmentsView.render();
+          }
+        }});
+      });
     }
   });
 }
@@ -64,8 +61,8 @@ function bindUiActions() {
 function courseNameSearch() {
   $('#searchResults').empty();
   latestSearch = $('#courseNameSearch').val();
+  var spinner = new Spinner(spinnerOptions).spin(document.getElementById('searchResults'));
   searchCourses.search(latestSearch, allCourses);
-  var spinner = new Spinner(opts).spin(document.getElementById('searchResults'));
 }
 
 function addBootstrapClasses() {
@@ -77,7 +74,7 @@ function addBootstrapClasses() {
   });
 }
 
-var opts = {
+var spinnerOptions = {
   lines: 17, // The number of lines to draw
   length: 9, // The length of each line
   width: 3, // The line thickness
