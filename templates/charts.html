@@ -3,10 +3,22 @@
 
 {% block header %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="../static/js/plugins/d3.v3.min.js"></script>
+    <script src="../static/js/plugins/d3-timeline.js"></script>
+	<script src="../static/js/plugins/jquery.js"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
-        var data;
+      var data;
+	  var width = "80%";
+
+	  var labelTestData = [
+        {label: "tik.kand", times: [{"deadline_label" : "JEEEE", "starting_time": 1355759900000, "ending_time": 1355759900000}, {"starting_time": 1355774400000, "ending_time": 1355774400000}]},
+        {label: "Fysiikka II A", times: [{"starting_time": 1355761900000, "ending_time": 1355761900000}, ]},
+        {label: "Matematiikan peruskurssi V2", times: [{"starting_time": 1355763910000, "ending_time": 1355763910000}]},
+      ];
+	  
+
 	  
 	  function drawChart() {
 	  	var mylist=document.getElementById("myList");
@@ -15,15 +27,48 @@
 	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].value;
 		console.log('selectedDate: ' + selectedDate);
 		if (selectedValue == 'Continuous'){
-			this.drawLineChart(selectedDate, false);
+			drawLineChart(selectedDate, false);
+			}
+		else if(selectedValue == 'Timeline'){
+			timelineHover();
+			}
+		else{
+			drawColumnChart(selectedDate, false);
+			}
 		}
-		else {
-			this.drawColumnChart(selectedDate, false);
-		}
-		
+	  
+	  	function timelineHover(){
+        var chart = d3.timeline()
+          .display("circle")
+          .width(2000)
+          .stack()
+          .margin({left:200, right:30, top:0, bottom:0})
+		  .tickFormat({  
+		  format: d3.time.format("%d.%m. %H:%M"), 
+		  tickTime: d3.time.hours, 
+		  tickNumber: 24, 
+		  tickSize: 6 })
+          .hover(function (d, i, datum) { 
+          // d is the current rendering object
+          // i is the index during d3 rendering
+          // datum is the id object
+            
+            var div = $('#chart_holder');
+            var colors = chart.colors();
+            //sdiv.find('.coloredDiv').css('background-color', colors(i))
+            div.find("#info").html(datum.times[0].deadline_label);
+          })
+          .click(function (d, i, datum) {
+            alert(datum.label);
+          })
+          .scroll(function (x, scale) {
+            $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
+          });
 
-		
-		}
+        var svg = d3.select("#chart_holder").append("svg").attr("width", width)
+          .datum(labelTestData).call(chart);
+    }
+	  
 	  
 	  function drawSameChart() {
 	  	var mylist=document.getElementById("myList");
@@ -210,6 +255,7 @@
   <div id="chart_options">
 		<p>Select the workload presentation
 		<select id="myList" onchange="drawChart()">
+			<option>Timeline</option>
 			<option>Continuous</option>
 			<option>Weekly</option>  
 		</select></p>
@@ -222,7 +268,8 @@
 		</select></p>
 	</div>
    
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="chart_div"></div>
+    <div id="chart_holder"><div id="info"></div></div>
     <a href="/" id="newCourseButton">Courses</a>
   </div>
 {% endblock %}
