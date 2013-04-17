@@ -13,9 +13,9 @@
 	  var width = 500;
 
 	  var labelTestData = [
-        {label: "person a", times: [{"deadline_label" : "JEEEE", "starting_time": 1355752800000, "ending_time": 1355759900000}, {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
-        {label: "person b", times: [{"starting_time": 1355759910000, "ending_time": 1355761900000}, ]},
-        {label: "person c", times: [{"starting_time": 1355761910000, "ending_time": 1355763910000}]},
+        {label: "tik.kand", times: [{"deadline_label" : "JEEEE", "starting_time": 1355759900000, "ending_time": 1355759900000}, {"starting_time": 1355774400000, "ending_time": 1355774400000}]},
+        {label: "Fysiikka II A", times: [{"starting_time": 1355761900000, "ending_time": 1355761900000}, ]},
+        {label: "Matematiikan peruskurssi V2", times: [{"starting_time": 1355763910000, "ending_time": 1355763910000}]},
       ];
 	  
 
@@ -39,6 +39,7 @@
 	  
 	  	function timelineHover(){
         var chart = d3.timeline()
+		  .display("circle")
           .width(width*4)
           .stack()
           .margin({left:70, right:30, top:0, bottom:0})
@@ -249,9 +250,9 @@
   <div id="chart_options">
 		<p>Select the workload presentation
 		<select id="myList" onchange="drawChart()">
+			<option>Timeline</option>
 			<option>Continuous</option>
 			<option>Weekly</option>  
-			<option>Timeline</option>
 		</select></p>
 		<p>Select the workload presentation
 		<select id="rangeSelectionList" onchange="drawSameChart()">
@@ -262,7 +263,7 @@
 		</select></p>
 	</div>
    
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="chart_div"></div>
     <div id="chart_holder"><div id="info"></div></div>
     <a href="/" id="newCourseButton">Courses</a>
   </div>
