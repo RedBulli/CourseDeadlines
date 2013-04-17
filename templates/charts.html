@@ -10,7 +10,7 @@
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       var data;
-	  var width = 500;
+	  var width = "80%";
 
 	  var labelTestData = [
         {label: "tik.kand", times: [{"deadline_label" : "JEEEE", "starting_time": 1355759900000, "ending_time": 1355759900000}, {"starting_time": 1355774400000, "ending_time": 1355774400000}]},
@@ -39,10 +39,10 @@
 	  
 	  	function timelineHover(){
         var chart = d3.timeline()
-		  .display("circle")
-          .width(width*4)
+          .display("circle")
+          .width(2000)
           .stack()
-          .margin({left:70, right:30, top:0, bottom:0})
+          .margin({left:200, right:30, top:0, bottom:0})
           .hover(function (d, i, datum) { 
           // d is the current rendering object
           // i is the index during d3 rendering
