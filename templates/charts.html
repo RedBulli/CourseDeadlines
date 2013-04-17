@@ -3,10 +3,39 @@
 
 {% block header %}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="../static/js/plugins/d3.v3.min.js"></script>
+    <script src="../static/js/plugins/d3-timeline.js"></script>
+	<script src="../static/js/plugins/jquery.js"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
         var data;
+	  
+	  
+	function timelineHover() {
+        var chart = d3.timeline()
+          .width(width*4)
+          .stack()
+          .margin({left:70, right:30, top:0, bottom:0})
+          .hover(function (d, i, datum) { 
+          // d is the current rendering object
+          // i is the index during d3 rendering
+          // datum is the id object
+            var div = $('#hoverRes');
+            var colors = chart.colors();
+            div.find('.coloredDiv').css('background-color', colors(i))
+            div.find('#name').text(datum.label);
+          })
+          .click(function (d, i, datum) {
+            alert(datum.label);
+          })
+          .scroll(function (x, scale) {
+            $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
+          });
+
+        var svg = d3.select("#timeline3").append("svg").attr("width", width)
+          .datum(labelTestData).call(chart);
+    }
 	  
 	  function drawChart() {
 	  	var mylist=document.getElementById("myList");
@@ -16,6 +45,9 @@
 		console.log('selectedDate: ' + selectedDate);
 		if (selectedValue == 'Continuous'){
 			this.drawLineChart(selectedDate, false);
+		}
+		else if(selectedValue == 'Timeline'){
+			this.timeLineHover();
 		}
 		else {
 			this.drawColumnChart(selectedDate, false);
@@ -212,6 +244,7 @@
 		<select id="myList" onchange="drawChart()">
 			<option>Continuous</option>
 			<option>Weekly</option>  
+			<option>Timeline</option>
 		</select></p>
 		<p>Select the workload presentation
 		<select id="rangeSelectionList" onchange="drawSameChart()">
