@@ -13,7 +13,7 @@
 	  var width = 500;
 
 	  var labelTestData = [
-        {label: "person a", times: [{"starting_time": 1355752800000, "ending_time": 1355759900000}, {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
+        {label: "person a", times: [{"deadline_label" : "JEEEE", "starting_time": 1355752800000, "ending_time": 1355759900000}, {"starting_time": 1355767900000, "ending_time": 1355774400000}]},
         {label: "person b", times: [{"starting_time": 1355759910000, "ending_time": 1355761900000}, ]},
         {label: "person c", times: [{"starting_time": 1355761910000, "ending_time": 1355763910000}]},
       ];
@@ -46,10 +46,11 @@
           // d is the current rendering object
           // i is the index during d3 rendering
           // datum is the id object
-            var div = $('#hoverRes');
+            
+            var div = $('#chart_holder');
             var colors = chart.colors();
-            div.find('.coloredDiv').css('background-color', colors(i))
-            div.find('#name').text(datum.label);
+            //sdiv.find('.coloredDiv').css('background-color', colors(i))
+            div.find("#info").html(datum.times[0].deadline_label);
           })
           .click(function (d, i, datum) {
             alert(datum.label);
@@ -58,7 +59,7 @@
             $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
           });
 
-        var svg = d3.select("#content").append("svg").attr("width", width)
+        var svg = d3.select("#chart_holder").append("svg").attr("width", width)
           .datum(labelTestData).call(chart);
     }
 	  
@@ -262,6 +263,7 @@
 	</div>
    
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <div id="chart_holder"><div id="info"></div></div>
     <a href="/" id="newCourseButton">Courses</a>
   </div>
 {% endblock %}
