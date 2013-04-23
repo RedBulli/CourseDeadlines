@@ -33,6 +33,7 @@
 			}
 		else if(selectedValue == 'Timeline'){
 			timelineHover();
+      setTouchevents();
 			}
 		else{
 			drawColumnChart(selectedDate, false);
@@ -70,6 +71,13 @@
           .datum(labelTestData).call(chart);
     }
 	  
+    function setTouchevents() {
+      $("#chart_holder #info circle").each( function(){
+        $(this).bind("touchstart",function() {
+          $(this).click();
+        });
+      });
+    }
 	  
 	  function drawSameChart() {
 	  	var mylist=document.getElementById("myList");
