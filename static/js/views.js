@@ -46,3 +46,32 @@ var CourseDataListView = Backbone.View.extend({
     });
   }
 });
+
+var PortraitLandscapeSwitchView = Backbone.View.extend({
+  initialize: function (){
+    this.landscape_template = Handlebars.compile($("#landscape_tmpl").html());
+    this.portrait_template = Handlebars.compile($("#portrait_tmpl").html());
+    this.lastOrientation;
+    var _this = this;
+    window.addEventListener("resize", function() {
+      if (_this.lastOrientation != _this.is_landscape()) {
+        _this.render();
+      } 
+    }, false);
+  },
+  is_landscape: function() {
+    return (window.innerHeight <= window.innerWidth);
+  },
+  get_template: function() {
+    if (this.is_landscape()) {
+      return this.landscape_template;        
+    }
+    else {
+        return this.portrait_template;
+    }
+  },
+  render: function() {
+      this.lastOrientation = this.is_landscape();
+      this.$el.html(this.get_template());
+  }
+});

@@ -8,10 +8,18 @@ var latestSearch;
 
 $(document).ready(function() {
   addBootstrapClasses();
+  initializePortraitLandscape();
   initializeCourseEnrollments();
   initializeNoppaCourses();
   bindUiActions();
 });
+
+function initializePortraitLandscape() {
+  var portraitLandscapeSwitchView = new PortraitLandscapeSwitchView(
+      {el: '#porlanscape'}
+  );
+  portraitLandscapeSwitchView.render();
+}
 
 function initializeNoppaCourses() {
   allCourses = new NoppaCourses();
@@ -30,13 +38,15 @@ function initializeCourseEnrollments() {
       var callbackCount = 0;
       collection.each(function(course) {
         course.fetchNoppaCourse({success: function() {
-          callbackCount++;
-          if (size == callbackCount) {
-            var courseEnrollmentsView = new CourseEnrollmentsView(
-              {collection: courseEnrollments, el: '#courseList'}
-            );
-            courseEnrollmentsView.render();
-          }
+          course.get('noppa_course').fetchAssignments({success: function() {
+            callbackCount++;
+            if (size == callbackCount) {
+              var courseEnrollmentsView = new CourseEnrollmentsView(
+                {collection: courseEnrollments, el: '#courseList'}
+              );
+              courseEnrollmentsView.render();
+            }
+          }});
         }});
       });
     }

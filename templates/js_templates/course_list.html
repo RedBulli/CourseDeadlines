@@ -1,6 +1,12 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "course_list_tmpl" %}
   {{#courses}}
-    <li>{{attributes.noppa_course.attributes.course_id}}: {{attributes.noppa_course.attributes.name}} <a href="{{id}}" class="removeCourse"><i class="icon-trash"></i></a></li>
+    <li>{{attributes.noppa_course.attributes.course_id}}: {{attributes.noppa_course.attributes.name}} <a href="{{id}}" class="removeCourse"><i class="icon-trash"></i></a>
+      <ul class="courseAssignments">
+        {{#attributes.noppa_course.attributes.assignments.models}}
+          <li>{{attributes.deadline}}: {{attributes.title}}</li>
+        {{/attributes.noppa_course.attributes.assignments.models}}
+      </ul>
+      </li>
   {{/courses}}
 {% endtplhandlebars %}
