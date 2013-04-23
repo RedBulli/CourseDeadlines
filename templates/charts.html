@@ -55,13 +55,16 @@
           // i is the index during d3 rendering
           // datum is the id object
             
-            var div = $('#chart_holder');
             var colors = chart.colors();
             //sdiv.find('.coloredDiv').css('background-color', colors(i))
-            div.find("#info").html(datum.times[0].deadline_label);
           })
           .click(function (d, i, datum) {
-            alert(datum.label);
+            /*var div = $('#chart_holder');
+            div.find("#info").html(datum.label+"<br />"+datum.times[0].deadline_label); */
+          })
+          .bind('touchstart', function(d, i, datum){
+            var div = $('#chart_holder');
+            div.find("#info").html(datum.label+"<br />"+datum.times[0].deadline_label);
           })
           .scroll(function (x, scale) {
             $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
