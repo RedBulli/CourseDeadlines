@@ -8,10 +8,18 @@ var latestSearch;
 
 $(document).ready(function() {
   addBootstrapClasses();
+  initializePortraitLandscape();
   initializeCourseEnrollments();
   initializeNoppaCourses();
   bindUiActions();
 });
+
+function initializePortraitLandscape() {
+  var portraitLandscapeSwitchView = new PortraitLandscapeSwitchView(
+      {el: '#porlanscape'}
+  );
+  portraitLandscapeSwitchView.render();
+}
 
 function initializeNoppaCourses() {
   allCourses = new NoppaCourses();
