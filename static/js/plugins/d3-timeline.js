@@ -5,6 +5,7 @@
 
     var hover = function () {}, 
         click = function () {},
+        bind = function () {},
         scroll = function () {},
         orient = "bottom",
         width = null,
@@ -257,6 +258,12 @@
     timeline.click = function (clickFunc) {
       if (!arguments.length) return click;
       click = clickFunc;
+      return timeline;
+    };
+    
+    timeline.bind = function (bindFunc) {
+      if (!arguments.length) return bind;
+      bind = bindFunc;
       return timeline;
     };
     

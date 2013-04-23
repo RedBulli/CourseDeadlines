@@ -59,15 +59,17 @@
             //sdiv.find('.coloredDiv').css('background-color', colors(i))
           })
           .click(function (d, i, datum) {
-            /*var div = $('#chart_holder');
-            div.find("#info").html(datum.label+"<br />"+datum.times[0].deadline_label); */
+            if('createTouch' in document == false) {
+              var div = $('#chart_holder');
+              div.find("#info").html(datum.label+"<br />"+datum.times[0].deadline_label);
+            }
+          })
+          .scroll(function (x, scale) {
+            $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
           })
           .bind('touchstart', function(d, i, datum){
             var div = $('#chart_holder');
             div.find("#info").html(datum.label+"<br />"+datum.times[0].deadline_label);
-          })
-          .scroll(function (x, scale) {
-            $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x+width));
           });
 
         var svg = d3.select("#chart_holder").append("svg").attr("width", width)
