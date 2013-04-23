@@ -7,7 +7,7 @@ var CourseEnrollmentsView = Backbone.View.extend({
   },
   render: function() {
     var _this = this;
-    this.$el.html(this.template({courses: this.collection.models}));
+    $('#' + this.id).html(this.template({courses: this.collection.models}));
     $('.removeCourse').click(function(event) {
       event.preventDefault();
       _this.collection.get($(this).attr('href')).destroy();
@@ -73,5 +73,6 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
   render: function() {
       this.lastOrientation = this.is_landscape();
       this.$el.html(this.get_template());
+      this.courseView.render();
   }
 });

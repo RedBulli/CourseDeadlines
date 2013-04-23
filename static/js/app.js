@@ -8,29 +8,35 @@ var latestSearch;
 
 $(document).ready(function() {
   addBootstrapClasses();
-  initializePortraitLandscape();
-  initializeCourseEnrollments();
-  initializeNoppaCourses();
+  var dataListView = initializeAllCourses();
+  var searchView = initializeSearchCourses();
+  initializeCourseEnrollments(function(enrollmentsView) {
+    initializePortraitLandscape(enrollmentsView);
+  });
   bindUiActions();
 });
 
-function initializePortraitLandscape() {
+function initializePortraitLandscape(enrollmentsView) {
   var portraitLandscapeSwitchView = new PortraitLandscapeSwitchView(
       {el: '#porlanscape'}
   );
+  portraitLandscapeSwitchView.courseView = enrollmentsView;
   portraitLandscapeSwitchView.render();
 }
 
-function initializeNoppaCourses() {
+function initializeAllCourses() {
   allCourses = new NoppaCourses();
-  searchCourses = new NoppaCourses();
-  var searchListView = new CourseSearchListView(
-    {collection: searchCourses, el: '#searchResults'}
-  );
-  var datalistView = new CourseDataListView({collection: allCourses});
+  return new CourseDataListView({collection: allCourses});
 }
 
-function initializeCourseEnrollments() {
+function initializeSearchCourses() {
+  searchCourses = new NoppaCourses();
+  return new CourseSearchListView(
+    {collection: searchCourses, el: '#searchResults'}
+  );
+}
+
+function initializeCourseEnrollments(callback) {
   courseEnrollments = new CourseEnrollments();
   courseEnrollments.fetch({
     success: function(collection) {
@@ -41,10 +47,9 @@ function initializeCourseEnrollments() {
           course.get('noppa_course').fetchAssignments({success: function() {
             callbackCount++;
             if (size == callbackCount) {
-              var courseEnrollmentsView = new CourseEnrollmentsView(
-                {collection: courseEnrollments, el: '#courseList'}
-              );
-              courseEnrollmentsView.render();
+              callback(new CourseEnrollmentsView(
+                {collection: courseEnrollments, id: 'courseList'}
+              ));
             }
           }});
         }});
