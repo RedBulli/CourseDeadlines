@@ -30,9 +30,11 @@ var CourseEnrollments = Backbone.Collection.extend({
     var enrollment = new CourseEnrollment({course_id: course_id, noppa_course: course_id});
     enrollment.save(enrollment.attributes, {success: function() {
       enrollment.fetchNoppaCourse({success: function() {
-        _this.add(enrollment);
-        _this.trigger('render');
-        callback();
+        enrollment.get('noppa_course').fetchAssignments({success: function() {
+          _this.add(enrollment);
+          _this.trigger('render');
+          callback();
+        }});
       }});
     }});
   }
