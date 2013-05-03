@@ -1,4 +1,28 @@
 //Backbone views
+var DeadlineView = Backbone.View.extend({
+  initialize: function() {
+    _.bindAll(this, 'render');
+    this.template = Handlebars.compile($('#deadline_tmpl').html());
+  },
+  render: function() {
+    var element = $(this.template({deadline: this.model}));
+    if (!this.$el.is(':empty')) {
+      this.$el.html(element);
+    }
+    else {
+      this.$el = element;
+      this.parentEl.append(element);
+    }
+    var _this = this;
+    this.$el.find('.editDeadline').click(function(event) {
+      var editDeadlineView = new EditDeadlineView({el: '#editDeadlineModal', model: _this.model});
+      editDeadlineView.render();
+      $('#myModal').modal();
+    });
+    return this;
+  }
+  
+});
 var CourseEnrollmentsView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render');
@@ -6,13 +30,32 @@ var CourseEnrollmentsView = Backbone.View.extend({
     this.collection.bind('add', this.render);
   },
   render: function() {
+    this.$el = $('#' + this.id);
+    this.$el.html(this.template({courses: this.collection.models}));
     var _this = this;
+    this.collection.each(function(course) {
+      course.get('noppa_course').get('assignments').each(function(deadline) {
+        var dlv = new DeadlineView({model: deadline});
+        dlv.parentEl = _this.$el.find('#courseAssignments');
+        dlv.render();
+      });
+    });
+    return this;
+    //var _this = this;
+    /*
     $('#' + this.id).html(this.template({courses: this.collection.models}));
     $('.removeCourse').click(function(event) {
       event.preventDefault();
       _this.collection.get($(this).attr('href')).destroy();
       _this.render();
     });
+    $('.editCourse').click(function(event) {
+      event.preventDefault();
+      var deadline = _this.collection.get($(this).attr('href'));
+      var courseView = 
+      _this.render();
+    });
+*/
   }
 });
 
@@ -74,5 +117,14 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
       this.lastOrientation = this.is_landscape();
       this.$el.html(this.get_template());
       this.courseView.render();
+  }
+});
+
+var EditDeadlineView = Backbone.View.extend({
+  initialize: function() {
+    this.template = Handlebars.compile($("#edit_deadlines_tmpl").html());
+  },
+  render: function() {
+    this.$el.html(this.template({deadline: this.model}));
   }
 });

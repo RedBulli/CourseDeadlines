@@ -11,6 +11,8 @@
   {% include "js_templates/course_search_list.html" %}
   {% include "js_templates/landscape.html" %}
   {% include "js_templates/portrait.html" %}
+  {% include "js_templates/edit_deadline_view.html" %}
+  {% include "js_templates/deadline.html" %}
   <header>
   {% if user.is_authenticated %}
   <div id="login">
@@ -53,4 +55,5 @@
   <a id="loginButton" href="/openid/login">Login using Google</a>
   </div>
   {% endif %}
+  <div id="editDeadlineModal"></div>
 {% endblock %}
