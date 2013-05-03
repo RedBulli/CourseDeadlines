@@ -1,14 +1,16 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "deadline_tmpl" %}
+
 <div id="oneCourse">
+  <span class="editDeadline">
          <div class="oneDeadline">
          <div id="dlButtons">
             <a href="" id="newCourseButton">Done</a> <a href="" id="newCourseButton">Trash</a>
             </div>
             {{deadline.attributes.deadline}}: <br><br>{{deadline.attributes.title}}
-            <span class="editDeadline">EDITIT</span>
             
          </div>
+       </span>
    </div>
 
 {% endtplhandlebars %}
