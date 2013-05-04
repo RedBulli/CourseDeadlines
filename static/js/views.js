@@ -41,21 +41,6 @@ var CourseEnrollmentsView = Backbone.View.extend({
       });
     });
     return this;
-    //var _this = this;
-    /*
-    $('#' + this.id).html(this.template({courses: this.collection.models}));
-    $('.removeCourse').click(function(event) {
-      event.preventDefault();
-      _this.collection.get($(this).attr('href')).destroy();
-      _this.render();
-    });
-    $('.editCourse').click(function(event) {
-      event.preventDefault();
-      var deadline = _this.collection.get($(this).attr('href'));
-      var courseView = 
-      _this.render();
-    });
-*/
   }
 });
 
@@ -103,7 +88,7 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
     }, false);
   },
   is_landscape: function() {
-    return (window.innerHeight <= window.innerWidth);
+    return (window.innerHeight*2 <= window.innerWidth);
   },
   get_template: function() {
     if (this.is_landscape()) {
@@ -125,6 +110,26 @@ var EditDeadlineView = Backbone.View.extend({
     this.template = Handlebars.compile($("#edit_deadlines_tmpl").html());
   },
   render: function() {
-    this.$el.html(this.template({deadline: this.model}));
+    var savedAssignment = this.model.getOrCreateSavedAssignment()
+    this.$el.html(this.template({deadline: this.model, savedAssignment: savedAssignment}));
+    this.bindClicks();
+  },
+  bindClicks: function() {
+    var _this = this;
+    this.$el.find('.save_deadline').click(function(event) {
+      var formData = _this.$el.find('.settings').serializeObject();
+      var workload = null;
+      var highlight = false;
+      if (formData.workload != null && formData.workload != undefined && formData.workload.length != 0) {
+        workload = parseInt(formData.workload);
+      }
+      if (formData.highlight == 'true') {
+        highlight = true;
+      }
+      else {
+        highlight = false;
+      }
+      _this.model.updateAssignment(workload, highlight);
+    });
   }
 });

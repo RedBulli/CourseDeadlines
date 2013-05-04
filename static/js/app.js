@@ -7,12 +7,18 @@ var organizations = [];
 var latestSearch;
 
 $(document).ready(function() {
+  var spinner = new Spinner(spinnerOptions).spin(document.getElementById('porlanscape'));
   addBootstrapClasses();
   var dataListView = initializeAllCourses();
   var searchView = initializeSearchCourses();
-  initializeCourseEnrollments(function(enrollmentsView) {
-    initializePortraitLandscape(enrollmentsView);
-  });
+  try {
+    initializeCourseEnrollments(function(enrollmentsView) {
+      initializePortraitLandscape(enrollmentsView);
+    });
+  }
+  catch(err) {
+    dataLoadingError(err);
+  }
   bindUiActions();
 });
 
@@ -43,19 +49,31 @@ function initializeCourseEnrollments(callback) {
       var size = collection.size();
       var callbackCount = 0;
       collection.each(function(course) {
-        course.fetchNoppaCourse({success: function() {
-          course.get('noppa_course').fetchAssignments({success: function() {
-            callbackCount++;
-            if (size == callbackCount) {
-              callback(new CourseEnrollmentsView(
-                {collection: courseEnrollments, id: 'courseList'}
-              ));
-            }
-          }});
-        }});
+        course.fetchNoppaCourse({
+          success: function() {
+            course.get('noppa_course').fetchAssignments({success: function() {
+              callbackCount++;
+              if (size == callbackCount) {
+                callback(new CourseEnrollmentsView(
+                  {collection: courseEnrollments, id: 'courseList'}
+                ));
+              }
+            }});
+          },
+          error: function(err) {
+            throw 'Error loading courses from Noppa';
+          }
+        });
       });
+    },
+    error: function(err) {
+      throw 'Error loading course enrollments.';
     }
   });
+}
+
+function dataLoadingError(err) {
+  $('#porlanscape').html(err);
 }
 
 function bindUiActions() {
@@ -107,4 +125,3 @@ var spinnerOptions = {
   top: 'auto', // Top position relative to parent in px
   left: 'auto' // Left position relative to parent in px
 };
-

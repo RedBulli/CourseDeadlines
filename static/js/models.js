@@ -1,5 +1,6 @@
 //Backbone models
 var ENROLLMENTS_ROOT = '/api/v1/enrollments/';
+var ASSIGNMENTS_ROOT = '/api/v1/assignments/';
 var DEADLINES_ROOT = '/api/v1/deadlines/';
 var API_KEY = 'cdda4ae4833c0114005de5b5c4371bb8';
 var NOPPA_COURSE_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
@@ -8,17 +9,41 @@ var NOPPA_TEST_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 
 var CourseEnrollment = Backbone.RelationalModel.extend({
   urlRoot: ENROLLMENTS_ROOT,
-  relations: [{
-    type: Backbone.HasOne,
-    key: 'noppa_course',
-    relatedModel: 'NoppaCourse',
-    includeInJSON: 'noppa_course'
-  }],
+  relations: [
+    {
+      type: Backbone.HasOne,
+      key: 'noppa_course',
+      relatedModel: 'NoppaCourse',
+      includeInJSON: 'noppa_course',
+      reverseRelation: {
+        type: Backbone.HasOne,
+        key: 'enrollment',
+        includeInJSON: false
+      }
+    },
+    {
+      type: Backbone.HasMany,
+      key: 'assignments',
+      relatedModel: 'Assignment',
+      includeInJSON: false,
+      reverseRelation: {
+        key: 'enrollment',
+        includeInJSON: Backbone.Model.prototype.idAttribute
+      }
+    }
+  ],
   fetchNoppaCourse: function(options) {
     options || (options = {});
     options.dataType = 'jsonp';
     options.data = {key: API_KEY};
     return this.fetchRelated('noppa_course', options);
+  },
+  getOrCreateSavedAssignment: function(name) {
+    var assignment = this.get('assignments').findWhere({name: name});
+    if (!assignment) {
+      assignment = new Assignment({enrollment: this, name: name});
+    }
+    return assignment;
   }
 });
 
@@ -40,7 +65,29 @@ var CourseEnrollments = Backbone.Collection.extend({
   }
 });
 
+var Assignment = Backbone.RelationalModel.extend({
+  urlRoot: ASSIGNMENTS_ROOT,
+  defaults: {
+    "workload": 1,
+    "highlight": false
+  },
+  relations: [
+    {
+      type: Backbone.HasOne,
+      key: 'noppa_assignment',
+      relatedModel: 'NoppaAssignment',
+      includeInJSON: true,
+      reverseRelation: {
+        type: Backbone.HasOne,
+        key: 'savedAssignment',
+        includeInJSON: false
+      }
+    }
+  ]
+});
+
 var NoppaAssignment = Backbone.RelationalModel.extend({
+  idAttribute: "title",
   relations: [{
     type: Backbone.HasOne,
     key: 'course',
@@ -51,6 +98,15 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
       includeInJSON: false
     }
   }],
+  getOrCreateSavedAssignment: function() {
+    return this.get('course').get('enrollment').getOrCreateSavedAssignment(this.get('title'));
+  },
+  updateAssignment: function(workload, highlight) {
+    var assignment = this.getOrCreateSavedAssignment();
+    assignment.set('workload', workload);
+    assignment.set('highlight', highlight);
+    assignment.save();
+  }
 });
 
 var NoppaAssignments = Backbone.Collection.extend({

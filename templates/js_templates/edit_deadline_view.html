@@ -8,29 +8,20 @@
           <h3 id="myModalLabel">{{deadline.attributes.title}}</h3>
          </div>
         <div class="modal-body">
-        <form class="settings" action="{% url 'Course.views.signup' %}" method="post">{% csrf_token %}
+        <form class="settings" action="" method="post">{% csrf_token %}
           <div class="control-group">
-          Course Name: {{attributes.noppa_course.attributes.name}} <br>
-          Deadline Date: {{deadline.attributes.deadline}}<br>
-            <textarea rows="4" cols="3" placeholder="{{deadline.attributes.content}}" class="" name="notifyEmail"></textarea>
+            Course Name: {{deadline.attributes.course.attributes.name}} <br>
+            Deadline Date: {{deadline.attributes.deadline}}<br>
+            <p>{{deadline.attributes.content}}</p>
           </div>
-          
-
-            <span class="highligtText">Workload:</span> <input type="text" placeholder="1" class="workloadText" name="workload">
-
-            <span class="highligtText">Highlight:</span>  <input type="checkbox" class="highlightCheckbox" name="highlight" value="highlight"> 
-
+            <span class="highligtText">Workload:</span> <input type="number" min="0" max="99" class="workloadText" name="workload" value="{{savedAssignment.attributes.workload}}">
+            <span class="highligtText">Highlight:</span> <input type="checkbox" class="highlightCheckbox" name="highlight" value="true" {{#savedAssignment.attributes.highlight}}checked{{/savedAssignment.attributes.highlight}}> 
             <input type="hidden" name="settings" value="True">
-    
-
           </form>
-        
-        
-          <p>{{deadline.attributes.serverModel.attributes.highlight}}</p>
         </div>
         <div class="modal-footer">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-          <button class="btn btn-primary">Save changes</button>
+          <button class="btn btn-primary save_deadline">Save changes</button>
         </div>
       </div>
 

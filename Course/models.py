@@ -17,6 +17,25 @@ class Enrollment(models.Model):
         super(Enrollment, self).save()
 
 
+class Assignment(models.Model):
+    enrollment = models.ForeignKey(Enrollment)
+    name = models.CharField(max_length=500)
+    STATUS_CHOICES = (
+        ('DEL', 'Deleted'),
+        ('DONE', 'Done'),
+        ('TODO', 'Todo'),
+    )
+    status = models.CharField(max_length=4, choices=STATUS_CHOICES, default='TODO')
+    workload = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    highlight = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ("enrollment", "name")
+
+    def __unicode__(self):
+        return u'%s: %s' % (self.enrollment, self.name)
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     notify_email = models.EmailField(null=True, blank=True)
