@@ -20,12 +20,7 @@ class Enrollment(models.Model):
 class Assignment(models.Model):
     enrollment = models.ForeignKey(Enrollment)
     name = models.CharField(max_length=500)
-    STATUS_CHOICES = (
-        ('DEL', 'Deleted'),
-        ('DONE', 'Done'),
-        ('TODO', 'Todo'),
-    )
-    status = models.CharField(max_length=4, choices=STATUS_CHOICES, default='TODO')
+    status = models.CharField(max_length=7, null=True, blank=True)
     workload = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     highlight = models.BooleanField(default=False)
 

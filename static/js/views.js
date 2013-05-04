@@ -5,7 +5,12 @@ var DeadlineView = Backbone.View.extend({
     this.template = Handlebars.compile($('#deadline_tmpl').html());
   },
   render: function() {
-    var element = $(this.template({deadline: this.model}));
+    var savedAssignment = this.model.getOrCreateSavedAssignment();
+    if (savedAssignment.get('status') == 'Deleted') {
+      return this;
+    }
+    var done = (savedAssignment.get('status') == 'Done');
+    var element = $(this.template({deadline: this.model, savedAssignment: savedAssignment, done: done}));
     if (!this.$el.is(':empty')) {
       this.$el.html(element);
     }
@@ -13,21 +18,35 @@ var DeadlineView = Backbone.View.extend({
       this.$el = element;
       this.parentEl.append(element);
     }
+    this.bindClicks();    
+    return this;
+  },
+  bindClicks: function() {
     var _this = this;
-    this.$el.find('.editDeadline').click(function(event) {
+    this.$el.find('.editDeadline').not('.dlButtons').click(function(event) {
       var editDeadlineView = new EditDeadlineView({el: '#editDeadlineModal', model: _this.model});
       editDeadlineView.render();
       $('#myModal').modal();
     });
-    return this;
+    var savedAssignment = this.model.getOrCreateSavedAssignment();
+    this.$el.find('.doneButton').click(function(event) {
+      savedAssignment.set('status', 'Done');
+      savedAssignment.save();
+      _this.render();
+    });
+    this.$el.find('.trashButton').click(function(event) {
+      savedAssignment.set('status', 'Deleted');
+      savedAssignment.save();
+      _this.$el.remove();
+    });
   }
-  
 });
 var CourseEnrollmentsView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render');
     this.template = Handlebars.compile($('#course_list_tmpl').html());
     this.collection.bind('add', this.render);
+    this.collection.bind('change', this.render);
   },
   render: function() {
     this.$el = $('#' + this.id);
@@ -110,7 +129,7 @@ var EditDeadlineView = Backbone.View.extend({
     this.template = Handlebars.compile($("#edit_deadlines_tmpl").html());
   },
   render: function() {
-    var savedAssignment = this.model.getOrCreateSavedAssignment()
+    var savedAssignment = this.model.getOrCreateSavedAssignment();
     this.$el.html(this.template({deadline: this.model, savedAssignment: savedAssignment}));
     this.bindClicks();
   },

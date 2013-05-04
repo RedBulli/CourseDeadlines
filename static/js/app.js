@@ -12,7 +12,8 @@ $(document).ready(function() {
   var dataListView = initializeAllCourses();
   var searchView = initializeSearchCourses();
   try {
-    initializeCourseEnrollments(function(enrollmentsView) {
+    initializeCourseEnrollments(function(courseEnrollments) {
+      var enrollmentsView = new CourseEnrollmentsView({collection: courseEnrollments, id: 'courseList'});
       initializePortraitLandscape(enrollmentsView);
     });
   }
@@ -47,6 +48,9 @@ function initializeCourseEnrollments(callback) {
   courseEnrollments.fetch({
     success: function(collection) {
       var size = collection.size();
+      if (size == 0) {
+        return callback(courseEnrollments);
+      }
       var callbackCount = 0;
       collection.each(function(course) {
         course.fetchNoppaCourse({
@@ -54,9 +58,7 @@ function initializeCourseEnrollments(callback) {
             course.get('noppa_course').fetchAssignments({success: function() {
               callbackCount++;
               if (size == callbackCount) {
-                callback(new CourseEnrollmentsView(
-                  {collection: courseEnrollments, id: 'courseList'}
-                ));
+                 return callback(courseEnrollments);
               }
             }});
           },

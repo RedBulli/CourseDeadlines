@@ -74,7 +74,7 @@ class AssignmentResource(ModelResource):
     name = fields.CharField(attribute='name')
     workload = fields.DecimalField(attribute='workload', null=True)
     highlight = fields.BooleanField(attribute='highlight')
-    #status = fields.CharField(attribute='status', null=True)
+    status = fields.CharField(attribute='status', null=True)
     
     def obj_create(self, bundle, request=None, **kwargs):
         res = EnrollmentResource()
@@ -82,6 +82,7 @@ class AssignmentResource(ModelResource):
         bundle.obj.name = bundle.data.get('name')
         bundle.obj.workload = bundle.data.get('workload')
         bundle.obj.highlight = bundle.data.get('highlight')
+        bundle.obj.status = bundle.data.get('status')
         bundle.obj.save()
         return bundle
 

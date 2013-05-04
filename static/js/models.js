@@ -179,7 +179,7 @@ var NoppaCourses = Backbone.Collection.extend({
       options.dataType = 'jsonp';
       options.data = {key: API_KEY, search: name};
       options.success = function(collection) {
-        allCourses.update(collection.models, {remove: false});
+        allCourses.set(collection.models, {remove: false});
         allCourses.trigger('update');
         _this.searches[name] = collection.models;
         if (name === latestSearch) {
