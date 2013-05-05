@@ -1,15 +1,25 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "landscape_tmpl" %}
   <h2>Courses I'm taking (landscape)</h2>
-  Tähän tulee kuvaaja
-  
-<!--
-  <ul id="courseList">
-  </ul>
- 
-  
-  <a href="#newCourseModal" id="newCourseButton" role="button" data-toggle="modal">Add course</a>
-  <a href="/charts" id="newCourseButton">Charts</a>
+  <div id="content">
+  <div id="chart_options">
+		<p>Select the workload presentation
+		<select id="myList" onchange="drawChart()">
+			<option>Timeline</option>
+			<option>Continuous</option>
+			<option>Weekly</option>  
+		</select></p>
+		<p>Select the workload presentation
+		<select id="rangeSelectionList" onchange="drawSameChart()">
+			<option value=7>Week</option>
+			<option value=30>Month</option>
+			<option value=90>3 Months</option>
+			<option value=365>Year</option>
+		</select></p>
+	</div>
+   
+    <div id="chart_div"></div>
+    <div id="chart_holder" style="width: 100%; overflow:auto"> <div id="info"></div></div>
   </div>
--->
+
 {% endtplhandlebars %}
