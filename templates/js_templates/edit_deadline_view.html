@@ -10,9 +10,9 @@
         <div class="modal-body">
         <form class="settings" action="" method="post">{% csrf_token %}
           <div class="control-group">
-            Course Name: {{deadline.attributes.course.attributes.name}} <br>
-            Deadline Date: {{deadline.attributes.deadline}}<br>
-            <p>{{deadline.attributes.content}}</p>
+            <p><b>Course Name:</b> {{deadline.attributes.course.attributes.name}} </p>
+            <p><b>Deadline Date:</b> {{deadline.attributes.deadline}}</p>
+            <p><b>Description:</b> {{deadline.attributes.content}}</p>
           </div>
             <span class="highligtText">Workload:</span> <input type="number" min="0" max="99" class="workloadText" name="workload" value="{{savedAssignment.attributes.workload}}">
             <span class="highligtText">Highlight:</span> <input type="checkbox" class="highlightCheckbox" name="highlight" value="true" {{#savedAssignment.attributes.highlight}}checked{{/savedAssignment.attributes.highlight}}> 

@@ -23,7 +23,7 @@ var DeadlineView = Backbone.View.extend({
   },
   bindClicks: function() {
     var _this = this;
-    this.$el.find('.editDeadline').not('.dlButtons').click(function(event) {
+    this.$el.find('.oneDeadline').not('.dlButtons').click(function(event) {
       var editDeadlineView = new EditDeadlineView({el: '#editDeadlineModal', model: _this.model});
       editDeadlineView.render();
       $('#myModal').modal();
