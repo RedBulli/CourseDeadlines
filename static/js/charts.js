@@ -1,14 +1,4 @@
-﻿{% extends "base.html" %}
-{% block title %}Course Deadlines{% endblock %}
-
-{% block header %}
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-	<script src="../static/js/plugins/d3.v3.min.js"></script>
-    <script src="../static/js/plugins/d3-timeline.js"></script>
-	<script src="../static/js/plugins/jquery.js"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
+﻿      google.load("visualization", "1", {packages:["corechart"]});
       var data;
 	  var width = 2000;
 
@@ -23,12 +13,12 @@
 
 	  
 	  function drawChart() {
-	  	//var mylist=document.getElementById("myList");
-	    //var selectedValue = mylist.options[mylist.selectedIndex].text;
-		var selectedValue = 'Continuous
-		//var rangeSelectionList=document.getElementById("rangeSelectionList");
-	    //var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].value;
-		var selectedDate = 7;
+	  	var mylist=document.getElementById("myList");
+	    var selectedValue = mylist.options[mylist.selectedIndex].text;
+		//var selectedValue = 'Continuous';
+		var rangeSelectionList=document.getElementById("rangeSelectionList");
+	    var selectedDate = rangeSelectionList.options[rangeSelectionList.selectedIndex].value;
+		//var selectedDate = 7;
 		console.log('selectedDate: ' + selectedDate);
 		if (selectedValue == 'Continuous'){
 			drawLineChart(selectedDate, false);
@@ -248,39 +238,3 @@
 		var onejan = new Date(this.getFullYear(),0,1);
 		return Math.ceil((((this - onejan) / 86400000) + onejan.getDay()+1)/7);
 	}
-    </script>
-{% endblock %}
-{% block content %}
-  <header>
-  {% if user.is_authenticated %}
-  <div id="login">
-    <a href="{% url 'Course.views.settings' %}">{{ user.email }}</a>
-    <a id="logoutButton" href="/logout">Logout</a>
-  </div>
-  {% endif %}
-    <h1>Course Deadlines</h1>
-    <nav>
-    </nav>
-  </header>
-  <div id="content">
-  <div id="chart_options">
-		<p>Select the workload presentation
-		<select id="myList" onchange="drawChart()">
-			<option>Timeline</option>
-			<option>Continuous</option>
-			<option>Weekly</option>  
-		</select></p>
-		<p>Select the workload presentation
-		<select id="rangeSelectionList" onchange="drawSameChart()">
-			<option value=7>Week</option>
-			<option value=30>Month</option>
-			<option value=90>3 Months</option>
-			<option value=365>Year</option>
-		</select></p>
-	</div>
-   
-    <div id="chart_div"></div>
-    <div id="chart_holder" style="width: 100%; overflow:auto"> <div id="info"></div></div>
-    <a href="/" id="newCourseButton">Courses</a>
-  </div>
-{% endblock %}
