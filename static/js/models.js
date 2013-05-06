@@ -60,8 +60,8 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
     });
     var sum = 0;
     $.each(assignments, function(index, assignment) {
-      if (assignments.get('savedAssignment')) {
-        sum += assignments.get('savedAssignment').get('workload');
+      if (assignment.get('savedAssignment')) {
+        sum += assignment.get('savedAssignment').get('workload');
       } else {
         sum += 1;
       }
@@ -128,7 +128,6 @@ var CourseEnrollments = Backbone.Collection.extend({
         })
       });
     });
-    //Doesnt work properly yet
     return dateArray.sort(function(a, b) {
       return a.date > b.date;
     });

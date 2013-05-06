@@ -32,7 +32,8 @@ var ChartView = Backbone.View.extend({
       this.timelineHover();
       this.setTouchevents();
     } else {
-      this.stackedBars(selectedDate, false);
+      //this.stackedBars(selectedDate, false);
+      this.googleColumnChart();
     }
   },
   getDeadlinesJSON: function() {
@@ -54,52 +55,100 @@ var ChartView = Backbone.View.extend({
       ending_time: date
     }];
   },
-  
-  stackedBars: function(){
-  
-  function bumpLayer(n, o) {
+  googleColumnChart: function() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'date');
+    this.collection.each(function(course) {
+      data.addColumn('number', course.get('noppa_course').get('name'));
+    });
+    var firstDate = new Date();
+    var lastDate;
+    for (var i = 0; i < 7; i++) {
+      lastDate = new Date(firstDate.getTime() + i * 24 * 60 * 60 * 1000);
+      var rowData = [];
+      rowData.push(lastDate);
+      this.collection.each(function(course) {
+        rowData.push(course.getWorkload(lastDate));
+      });
+      data.addRows([rowData]);
+    }
+    new google.visualization.ColumnChart(document.getElementById('chart_div')).
+    draw(data, {
+      title: "Yearly Coffee Consumption by Country",
+      width: 600,
+      height: 400,
+      hAxis: {
+        title: "Year"
+      },
+      isStacked: true
+    });
+  },
 
-    function bump(a) {
-      var x = 1 / (.1 + Math.random()),
-        y = 2 * Math.random() - .5,
-        z = 10 / (.1 + Math.random());
+  stackedBars: function() {
+
+    function bumpLayer(n, o) {
+
+      function bump(a) {
+        var x = 1 / (.1 + Math.random()),
+          y = 2 * Math.random() - .5,
+          z = 10 / (.1 + Math.random());
         for (var i = 0; i < n; i++) {
           var w = (i / n - y) * z;
           a[i] += x * Math.exp(-w * w);
         }
       }
-    var a = [], i;
-    for (i = 0; i < n; ++i){
-	  a[i] = o + o * Math.random();
-	}
-	
-    for (i = 0; i < 5; ++i){
-	  bump(a);
-	}
-    return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
-  }
+      var a = [],
+        i;
+      for (i = 0; i < n; ++i) {
+        a[i] = o + o * Math.random();
+      }
 
-  function change() {
-    clearTimeout(timeout);
-    if (this.value === "grouped"){
-	  transitionGrouped();
-	}
-    else{
-	  transitionStacked();
-	}
-  }
-  
-  
+      for (i = 0; i < 5; ++i) {
+        bump(a);
+      }
+      return a.map(function(d, i) {
+        return {
+          x: i,
+          y: Math.max(0, d)
+        };
+      });
+    }
+
+    function change() {
+      clearTimeout(timeout);
+      if (this.value === "grouped") {
+        transitionGrouped();
+      } else {
+        transitionStacked();
+      }
+    }
+
+
     n = this.collection.size(), // number of layers
-      m = 58, // number of samples per layer
-      stack = d3.layout.stack(),
-      layers = stack(d3.range(n).map(function() { return bumpLayer(m, .1); })),
-      yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); }),
-      yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
-	
-	
-    var margin = {top: 40, right: 10, bottom: 20, left: 10},
-      width = 960 - margin.left - margin.right,
+    m = 58, // number of samples per layer
+    stack = d3.layout.stack(),
+    layers = stack(d3.range(n).map(function() {
+      return bumpLayer(m, .1);
+    })),
+    yGroupMax = d3.max(layers, function(layer) {
+      return d3.max(layer, function(d) {
+        return d.y;
+      });
+    }),
+    yStackMax = d3.max(layers, function(layer) {
+      return d3.max(layer, function(d) {
+        return d.y0 + d.y;
+      });
+    });
+
+
+    var margin = {
+      top: 40,
+      right: 10,
+      bottom: 20,
+      left: 10
+    },
+    width = 960 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
     var x = d3.scale.ordinal()
@@ -130,20 +179,32 @@ var ChartView = Backbone.View.extend({
       .data(layers)
       .enter().append("g")
       .attr("class", "layer")
-      .style("fill", function(d, i) { return color(i); });
+      .style("fill", function(d, i) {
+      return color(i);
+    });
 
     var rect = layer.selectAll("rect")
-      .data(function(d) { return d; })
+      .data(function(d) {
+      return d;
+    })
       .enter().append("rect")
-      .attr("x", function(d) { return x(d.x); })
+      .attr("x", function(d) {
+      return x(d.x);
+    })
       .attr("y", height)
       .attr("width", x.rangeBand())
       .attr("height", 0);
 
     rect.transition()
-      .delay(function(d, i) { return i * 10; })
-      .attr("y", function(d) { return y(d.y0 + d.y); })
-      .attr("height", function(d) { return y(d.y0) - y(d.y0 + d.y); });
+      .delay(function(d, i) {
+      return i * 10;
+    })
+      .attr("y", function(d) {
+      return y(d.y0 + d.y);
+    })
+      .attr("height", function(d) {
+      return y(d.y0) - y(d.y0 + d.y);
+    });
 
     svg.append("g")
       .attr("class", "x axis")
@@ -154,13 +215,10 @@ var ChartView = Backbone.View.extend({
 
     var timeout = setTimeout(function() {
       d3.select("input[value=\"grouped\"]").property("checked", true).each(change);
-      }, 2000);
-	},
-  
+    }, 2000);
+  },
 
 
-  
-  
   timelineHover: function() {
     var chart = d3.timeline()
       .display("circle")
