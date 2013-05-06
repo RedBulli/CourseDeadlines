@@ -103,19 +103,17 @@ var ChartView = Backbone.View.extend({
     this.collection.each(function(course) {
       data.addColumn('number', course.get('noppa_course').get('name'));
     });
-    var date = new Date();
+    var firstDate = new Date();
+    var lastDate;
     for (var i = 0; i < dateRange; i++) {
-      date = new Date(date.getTime() + i * 24 * 60 * 60 * 1000);
+      lastDate = new Date(firstDate.getTime() + i * 24 * 60 * 60 * 1000);
       var rowData = [];
-      rowData.push(date);
+      rowData.push(lastDate);
       this.collection.each(function(course) {
-        rowData.push(course.getWorkload(date));
+        rowData.push(course.getWorkload(lastDate));
       });
       data.addRows([rowData]);
     }
-    var today = new Date();
-    var nextRange = new Date();
-    nextRange.setDate(nextRange.getDate() + parseInt(dateRange));
     var options = {
       title: 'Course Work Load',
       isStacked: true,
@@ -123,8 +121,8 @@ var ChartView = Backbone.View.extend({
       hAxis: {
         viewWindowMode: 'explicit',
         viewWindow: {
-          min: today,
-          max: nextRange
+          min: firstDate,
+          max: lastDate
         }
       }
     };
