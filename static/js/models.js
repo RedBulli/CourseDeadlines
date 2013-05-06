@@ -138,7 +138,9 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
   },
   customToJSON: function() {
     var json = this.toJSON();
-    json.customDate = this.get('deadline');
+    var date = new Date(Date.parse(this.get('deadline')));
+    json.customDate = date;
+    json.courseName = this.get('course').get('name');
     return json;
   }
 });
