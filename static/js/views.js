@@ -10,21 +10,27 @@ var DeadlineView = Backbone.View.extend({
       return this;
     }
     var done = (savedAssignment.get('status') == 'Done');
-    var element = $(this.template({deadline: this.model, savedAssignment: savedAssignment, done: done}));
+    var element = $(this.template({
+      deadline: this.model,
+      savedAssignment: savedAssignment,
+      done: done
+    }));
     if (!this.$el.is(':empty')) {
       this.$el.html(element);
-    }
-    else {
+    } else {
       this.$el = element;
       this.parentEl.append(element);
     }
-    this.bindClicks();    
+    this.bindClicks();
     return this;
   },
   bindClicks: function() {
     var _this = this;
     this.$el.find('.oneDeadline').not('.dlButtons').click(function(event) {
-      var editDeadlineView = new EditDeadlineView({el: '#editDeadlineModal', model: _this.model});
+      var editDeadlineView = new EditDeadlineView({
+        el: '#editDeadlineModal',
+        model: _this.model
+      });
       editDeadlineView.render();
       $('#myModal').modal();
     });
@@ -41,6 +47,7 @@ var DeadlineView = Backbone.View.extend({
     });
   }
 });
+
 var CourseEnrollmentsView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render');
@@ -50,11 +57,15 @@ var CourseEnrollmentsView = Backbone.View.extend({
   },
   render: function() {
     this.$el = $('#' + this.id);
-    this.$el.html(this.template({courses: this.collection.models}));
+    this.$el.html(this.template({
+      courses: this.collection.models
+    }));
     var _this = this;
     this.collection.each(function(course) {
-      course.get('noppa_course').get('assignments').each(function(deadline) {
-        var dlv = new DeadlineView({model: deadline});
+      $.each(course.getFutureAssignments(), function(index, deadline) {
+        var dlv = new DeadlineView({
+          model: deadline
+        });
         dlv.parentEl = _this.$el.find('#courseAssignments');
         dlv.render();
       });
@@ -72,7 +83,9 @@ var CourseSearchListView = Backbone.View.extend({
   render: function() {
     var _this = this;
     var json = this.collection.customToJSON(courseEnrollments);
-    this.$el.html(this.template({courses: json}));
+    this.$el.html(this.template({
+      courses: json
+    }));
     $('.attendCourse').click(function() {
       courseEnrollments.addCourse($(this).val(), function() {
         _this.render();
@@ -95,28 +108,27 @@ var CourseDataListView = Backbone.View.extend({
 });
 
 var PortraitLandscapeSwitchView = Backbone.View.extend({
-  initialize: function (){
+  initialize: function() {
     this.portrait_template = Handlebars.compile($("#portrait_tmpl").html());
     this.lastOrientation;
     var _this = this;
     window.addEventListener("resize", function() {
       if (_this.lastOrientation != _this.is_landscape()) {
         _this.render();
-      } 
+      }
     }, false);
   },
   is_landscape: function() {
-    return (window.innerHeight*2 <= window.innerWidth);
+    return (window.innerHeight * 2 <= window.innerWidth);
   },
   render: function() {
-      this.lastOrientation = this.is_landscape();
-      if (this.lastOrientation) {
-        this.landscapeView.render();
-      }
-      else {
-        this.$el.html(this.portrait_template);
-        this.courseView.render();
-      }
+    this.lastOrientation = this.is_landscape();
+    if (this.lastOrientation) {
+      this.landscapeView.render();
+    } else {
+      this.$el.html(this.portrait_template);
+      this.courseView.render();
+    }
   }
 });
 
@@ -126,7 +138,10 @@ var EditDeadlineView = Backbone.View.extend({
   },
   render: function() {
     var savedAssignment = this.model.getOrCreateSavedAssignment();
-    this.$el.html(this.template({deadline: this.model, savedAssignment: savedAssignment}));
+    this.$el.html(this.template({
+      deadline: this.model,
+      savedAssignment: savedAssignment
+    }));
     this.bindClicks();
   },
   bindClicks: function() {
@@ -140,8 +155,7 @@ var EditDeadlineView = Backbone.View.extend({
       }
       if (formData.highlight == 'true') {
         highlight = true;
-      }
-      else {
+      } else {
         highlight = false;
       }
       _this.model.updateAssignment(workload, highlight);
