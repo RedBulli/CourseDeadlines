@@ -102,10 +102,22 @@
 		var betaCounter = 0;
 		var gammaCounter = 0;
 		var deltaCounter = 0;
+		var previousWeek = 0;
         for(var i = 0; i< 30; i++){
           courseSelector = Math.floor((Math.random()*4)+1);
           counter++;
           dateCounter = dateCounter+ Math.floor((Math.random()*4)+1);
+		  var date = new Date(2013, monthCounter, dateCounter);
+		  var week = date.getWeek();
+
+		  	if (week > previousWeek){
+				previousWeek = week;
+				var alphaCounter = 0;
+				var betaCounter = 0;
+				var gammaCounter = 0;
+				var deltaCounter = 0;
+			}
+		  
           switch(courseSelector){
             case 1:
 			    alphaCounter++;
