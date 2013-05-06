@@ -11,7 +11,7 @@
         <form class="settings" action="" method="post">{% csrf_token %}
           <div class="control-group">
             <p><b>Course Name:</b> {{deadline.attributes.course.attributes.name}} </p>
-            <p><b>Deadline Date:</b> {{deadline.attributes.deadline}}</p>
+            <p><b>Deadline Date:</b> {{deadline.attributes.deadline.customDateString}}</p>
             <p><b>Description:</b><textarea readonly class="deadlineDescription"> {{deadline.attributes.content}}</textarea></p>
           </div>
             <span class="highligtText">Workload:</span> <input type="number" min="0" max="99" class="workloadText" name="workload" value="{{savedAssignment.attributes.workload}}">

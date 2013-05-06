@@ -180,10 +180,24 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
     var date = this.getDateObjectDeadline();
     json.customDate = date;
     json.courseName = this.get('course').get('name');
+    
+    var d = new Date(Date.parse(this.get('deadline')));
+    var day = d.getDate();
+    var month = d.getMonth() + 1;
+    var year = d.getFullYear();
+    var hours = d.getHours();
+    var mins = d.getMinutes();
+    if (mins < 10){
+      mins = mins + "0";
+    }
+    
+    json.customDateString = (day + "." + month + "." + year + " at: " + hours + ":" + mins);
+    
     return json;
   },
   getDateObjectDeadline: function() {
     return new Date(Date.parse(this.get('deadline')));
+
   }
 });
 
