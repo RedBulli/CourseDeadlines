@@ -5,14 +5,14 @@
        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
          <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4 id="myModalLabel">{{deadline.attributes.title}}</h4>
+          <h4 id="myModalLabel">{{deadline.title}}</h4>
          </div>
         <div class="modal-body">
         <form class="settings" action="" method="post">{% csrf_token %}
           <div class="control-group">
-            <p><b>Course Name:</b> {{deadline.attributes.course.attributes.name}} </p>
-            <p><b>Deadline Date:</b> {{deadline.attributes.deadline.customDateString}}</p>
-            <p><b>Description:</b><textarea readonly class="deadlineDescription"> {{deadline.attributes.content}}</textarea></p>
+            <p><b>Course Name:</b> {{deadline.courseName}} </p>
+            <p><b>Deadline Date:</b> {{deadline.customDateString}}</p>
+            <p><b>Description:</b><textarea readonly class="deadlineDescription">{{deadline.content}}</textarea></p>
           </div>
             <span class="highligtText">Workload:</span> <input type="number" min="0" max="99" class="workloadText" name="workload" value="{{savedAssignment.attributes.workload}}">
             <span class="highligtText">Highlight:</span> <input type="checkbox" class="highlightCheckbox" name="highlight" value="true" {{#savedAssignment.attributes.highlight}}checked{{/savedAssignment.attributes.highlight}}> 

@@ -139,7 +139,7 @@ var EditDeadlineView = Backbone.View.extend({
   render: function() {
     var savedAssignment = this.model.getOrCreateSavedAssignment();
     this.$el.html(this.template({
-      deadline: this.model,
+      deadline: this.model.customToJSON(),
       savedAssignment: savedAssignment
     }));
     this.bindClicks();
