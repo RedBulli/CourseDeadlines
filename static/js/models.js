@@ -7,41 +7,49 @@ var NOPPA_COURSE_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 var NOPPA_ASSIGNMENT_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 var NOPPA_TEST_ROOT = 'http://noppa-api-dev.aalto.fi/api/v1/courses';
 
+function truncateDate(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
 var CourseEnrollment = Backbone.RelationalModel.extend({
   urlRoot: ENROLLMENTS_ROOT,
-  relations: [
-    {
+  relations: [{
+    type: Backbone.HasOne,
+    key: 'noppa_course',
+    relatedModel: 'NoppaCourse',
+    includeInJSON: 'noppa_course',
+    reverseRelation: {
       type: Backbone.HasOne,
-      key: 'noppa_course',
-      relatedModel: 'NoppaCourse',
-      includeInJSON: 'noppa_course',
-      reverseRelation: {
-        type: Backbone.HasOne,
-        key: 'enrollment',
-        includeInJSON: false
-      }
-    },
-    {
-      type: Backbone.HasMany,
-      key: 'assignments',
-      relatedModel: 'Assignment',
-      includeInJSON: false,
-      reverseRelation: {
-        key: 'enrollment',
-        includeInJSON: Backbone.Model.prototype.idAttribute
-      }
+      key: 'enrollment',
+      includeInJSON: false
     }
-  ],
+  }, {
+    type: Backbone.HasMany,
+    key: 'assignments',
+    relatedModel: 'Assignment',
+    includeInJSON: false,
+    reverseRelation: {
+      key: 'enrollment',
+      includeInJSON: Backbone.Model.prototype.idAttribute
+    }
+  }],
   fetchNoppaCourse: function(options) {
     options || (options = {});
     options.dataType = 'jsonp';
-    options.data = {key: API_KEY};
+    options.data = {
+      key: API_KEY
+    };
     return this.fetchRelated('noppa_course', options);
   },
   getOrCreateSavedAssignment: function(name) {
-    var assignment = this.get('assignments').findWhere({name: name});
+    var assignment = this.get('assignments').findWhere({
+      name: name
+    });
     if (!assignment) {
-      assignment = new Assignment({enrollment: this, name: name});
+      assignment = new Assignment({
+        enrollment: this,
+        name: name
+      });
     }
     return assignment;
   },
@@ -54,8 +62,7 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
     $.each(assignments, function(index, assignment) {
       if (assignments.get('savedAssignment')) {
         sum += assignments.get('savedAssignment').get('workload');
-      }
-      else {
+      } else {
         sum += 1;
       }
     });
@@ -74,16 +81,25 @@ var CourseEnrollments = Backbone.Collection.extend({
   model: CourseEnrollment,
   addCourse: function(course_id, callback) {
     var _this = this;
-    var enrollment = new CourseEnrollment({course_id: course_id, noppa_course: course_id});
-    enrollment.save(enrollment.attributes, {success: function() {
-      enrollment.fetchNoppaCourse({success: function() {
-        enrollment.get('noppa_course').fetchAssignments({success: function() {
-          _this.add(enrollment);
-          _this.trigger('render');
-          callback();
-        }});
-      }});
-    }});
+    var enrollment = new CourseEnrollment({
+      course_id: course_id,
+      noppa_course: course_id
+    });
+    enrollment.save(enrollment.attributes, {
+      success: function() {
+        enrollment.fetchNoppaCourse({
+          success: function() {
+            enrollment.get('noppa_course').fetchAssignments({
+              success: function() {
+                _this.add(enrollment);
+                _this.trigger('render');
+                callback();
+              }
+            });
+          }
+        });
+      }
+    });
   },
   getAssignments: function() {
     var assignments = [];
@@ -91,6 +107,31 @@ var CourseEnrollments = Backbone.Collection.extend({
       assignments = _.union(assignments, enrollment.getFutureAssignments());
     });
     return assignments;
+  },
+  getAssignmentsGroupedByDate: function() {
+    var assignments = this.getAssignments();
+    var dates = {};
+    $.each(assignments, function(index, assignment) {
+      var date = truncateDate(new Date(Date.parse(assignment.get('deadline'))));
+      if (dates.hasOwnProperty(date)) {
+        dates[date].push(assignment);
+      } else {
+        dates[date] = [assignment];
+      }
+    });
+    var dateArray = [];
+    $.each(dates, function(date, assignments) {
+      dateArray.push({
+        date: date,
+        assignments: assignments.sort(function(a, b) {
+          return a.getDateObjectDeadline() > b.getDateObjectDeadline();
+        })
+      });
+    });
+    //Doesnt work properly yet
+    return dateArray.sort(function(a, b) {
+      return a.date < b.date;
+    });
   }
 });
 
@@ -100,19 +141,17 @@ var Assignment = Backbone.RelationalModel.extend({
     "workload": 1,
     "highlight": false
   },
-  relations: [
-    {
+  relations: [{
+    type: Backbone.HasOne,
+    key: 'noppa_assignment',
+    relatedModel: 'NoppaAssignment',
+    includeInJSON: true,
+    reverseRelation: {
       type: Backbone.HasOne,
-      key: 'noppa_assignment',
-      relatedModel: 'NoppaAssignment',
-      includeInJSON: true,
-      reverseRelation: {
-        type: Backbone.HasOne,
-        key: 'savedAssignment',
-        includeInJSON: false
-      }
+      key: 'savedAssignment',
+      includeInJSON: false
     }
-  ]
+  }]
 });
 
 var NoppaAssignment = Backbone.RelationalModel.extend({
@@ -142,6 +181,9 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
     json.customDate = date;
     json.courseName = this.get('course').get('name');
     return json;
+  },
+  getDateObjectDeadline: function() {
+    return new Date(Date.parse(this.get('deadline')));
   }
 });
 
@@ -150,7 +192,9 @@ var NoppaAssignments = Backbone.Collection.extend({
   fetchAll: function(options) {
     options || (options = {});
     options.dataType = 'jsonp';
-    options.data = {key: API_KEY};
+    options.data = {
+      key: API_KEY
+    };
     return this.fetch(options);
   },
   parse: function(response) {
@@ -166,8 +210,8 @@ var NoppaAssignments = Backbone.Collection.extend({
 });
 
 var NoppaCourse = Backbone.RelationalModel.extend({
-  url: function () {
-    return NOPPA_COURSE_ROOT + '/' +this.get('course_id');
+  url: function() {
+    return NOPPA_COURSE_ROOT + '/' + this.get('course_id');
   },
   idAttribute: 'course_id',
   fetchAssignments: function(options) {
@@ -184,7 +228,9 @@ var NoppaSearchCourse = Backbone.Model.extend({
   customToJSON: function(enrollments) {
     var json = this.toJSON();
     var enrolled = false;
-    if (enrollments.where({course_id: this.get('course_id')}).length > 0) {
+    if (enrollments.where({
+      course_id: this.get('course_id')
+    }).length > 0) {
       enrolled = true;
     }
     json.enrolled = enrolled;
@@ -213,9 +259,14 @@ var NoppaCourses = Backbone.Collection.extend({
       options || (options = {});
       var data = (options.data || {});
       options.dataType = 'jsonp';
-      options.data = {key: API_KEY, search: name};
+      options.data = {
+        key: API_KEY,
+        search: name
+      };
       options.success = function(collection) {
-        allCourses.set(collection.models, {remove: false});
+        allCourses.set(collection.models, {
+          remove: false
+        });
         allCourses.trigger('update');
         _this.searches[name] = collection.models;
         if (name === latestSearch) {
@@ -226,8 +277,7 @@ var NoppaCourses = Backbone.Collection.extend({
         console.log("ERRORI");
       }
       return Backbone.Collection.prototype.fetch.call(this, options);
-    }
-    else {
+    } else {
       _this.models = this.searches[name];
       _this.trigger('render');
     }
@@ -242,4 +292,3 @@ var NoppaCourses = Backbone.Collection.extend({
     return collection;
   }
 });
-
