@@ -14,7 +14,8 @@ $(document).ready(function() {
   try {
     initializeCourseEnrollments(function(courseEnrollments) {
       var enrollmentsView = new CourseEnrollmentsView({collection: courseEnrollments, id: 'courseList'});
-      initializePortraitLandscape(enrollmentsView);
+      var chartView = new ChartView({collection: courseEnrollments, el: '#porlanscape'});
+      initializePortraitLandscape(enrollmentsView, chartView);
     });
   }
   catch(err) {
@@ -23,11 +24,12 @@ $(document).ready(function() {
   bindUiActions();
 });
 
-function initializePortraitLandscape(enrollmentsView) {
+function initializePortraitLandscape(enrollmentsView, chartView) {
   var portraitLandscapeSwitchView = new PortraitLandscapeSwitchView(
       {el: '#porlanscape'}
   );
   portraitLandscapeSwitchView.courseView = enrollmentsView;
+  portraitLandscapeSwitchView.landscapeView = chartView;
   portraitLandscapeSwitchView.render();
 }
 

@@ -96,7 +96,6 @@ var CourseDataListView = Backbone.View.extend({
 
 var PortraitLandscapeSwitchView = Backbone.View.extend({
   initialize: function (){
-    this.landscape_template = Handlebars.compile($("#landscape_tmpl").html());
     this.portrait_template = Handlebars.compile($("#portrait_tmpl").html());
     this.lastOrientation;
     var _this = this;
@@ -109,18 +108,15 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
   is_landscape: function() {
     return (window.innerHeight*2 <= window.innerWidth);
   },
-  get_template: function() {
-    if (this.is_landscape()) {
-      return this.landscape_template;        
-    }
-    else {
-        return this.portrait_template;
-    }
-  },
   render: function() {
       this.lastOrientation = this.is_landscape();
-      this.$el.html(this.get_template());
-      this.courseView.render();
+      if (this.lastOrientation) {
+        this.landscapeView.render();
+      }
+      else {
+        this.$el.html(this.portrait_template);
+        this.courseView.render();
+      }
   }
 });
 
