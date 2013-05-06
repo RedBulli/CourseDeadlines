@@ -13,22 +13,10 @@ v1_api.register(EnrollmentResource())
 v1_api.register(AssignmentResource())
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', TemplateView.as_view(template_name="index.html")),
     url(r'^$', signup),
-    url(r'^settings', settings),
     url(r'^api/', include(v1_api.urls)),
-    # url(r'^$', 'CourseDeadlines.views.home', name='home'),
-    # url(r'^CourseDeadlines/', include('CourseDeadlines.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^openid/', include('django_openid_auth.urls')),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/',}, name='logout'),
-	url(r'^charts/', chart),
-
-	
+    url(r'^charts/', chart),
 )

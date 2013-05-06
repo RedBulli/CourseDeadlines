@@ -16,7 +16,7 @@
   <header>
   {% if user.is_authenticated %}
   <div id="login">
-    <a href="{% url 'Course.views.settings' %}">{{ user.email }}</a>
+    {{ user.email }}
     <a id="logoutButton" href="/logout">Logout</a>
   </div>
   {% endif %}
