@@ -1,4 +1,5 @@
 //Backbone views
+
 var DeadlineView = Backbone.View.extend({
   initialize: function() {
     _.bindAll(this, 'render');
@@ -15,12 +16,7 @@ var DeadlineView = Backbone.View.extend({
       savedAssignment: savedAssignment,
       done: done
     }));
-    if (!this.$el.is(':empty')) {
-      this.$el.html(element);
-    } else {
-      this.$el = element;
-      this.parentEl.append(element);
-    }
+    this.$el.html(element);
     this.bindClicks();
     return this;
   },
@@ -62,16 +58,15 @@ var CourseEnrollmentsView = Backbone.View.extend({
   },
   render: function() {
     this.$el = $('#' + this.id);
+    var dateGroups = this.collection.getAssignmentsGroupedByDate();
     this.$el.html(this.template({
-      courses: this.collection.models
+      dates: dateGroups
     }));
     var _this = this;
-    this.collection.each(function(course) {
-      $.each(course.getFutureAssignments(), function(index, deadline) {
-        var dlv = new DeadlineView({
-          model: deadline
-        });
-        dlv.parentEl = _this.$el.find('#courseAssignments');
+    $.each(dateGroups, function(index, object) {
+      var el = $('#assignments_day_'+object.time);
+      $.each(object.assignments, function(index, assignment) {
+        var dlv = new DeadlineView({model: assignment, el: el});
         dlv.render();
       });
     });

@@ -14,15 +14,13 @@
   {% include "js_templates/edit_deadline_view.html" %}
   {% include "js_templates/deadline.html" %}
   <header>
-  {% if user.is_authenticated %}
-  <div id="login">
-    {{ user.email }}
-    <a id="logoutButton" href="/logout">Logout</a>
-  </div>
-  {% endif %}
+    {% if user.is_authenticated %}
+    <div id="login">
+      {{ user.email }}
+      <a id="logoutButton" href="/logout">Logout</a>
+    </div>
+    {% endif %}
     <h1>Course Deadlines</h1>
-    <nav>
-    </nav>
   </header>
   <div id="content">
   <div id="porlanscape"></div>

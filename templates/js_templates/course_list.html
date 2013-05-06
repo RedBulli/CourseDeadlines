@@ -1,6 +1,10 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "course_list_tmpl" %}
-  {{#courses}}
-  <ul id="courseAssignments"></ul>
-  {{/courses}}
+<ul id="assignmentDates">
+  {{#dates}}
+  <li>{{dateString}}
+    <ul id="assignments_day_{{time}}" class="courseAssignments"></ul>
+  </li>
+  {{/dates}}
+</ul>
 {% endtplhandlebars %}
