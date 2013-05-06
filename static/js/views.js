@@ -40,6 +40,11 @@ var DeadlineView = Backbone.View.extend({
       savedAssignment.save();
       _this.render();
     });
+    this.$el.find('.undoButton').click(function(event) {
+      savedAssignment.set('status', 'Todo');
+      savedAssignment.save();
+      _this.render();
+    });
     this.$el.find('.trashButton').click(function(event) {
       savedAssignment.set('status', 'Deleted');
       savedAssignment.save();

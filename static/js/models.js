@@ -59,11 +59,11 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
       return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()) && (thisDate.getDate() === date.getDate()));
     });
     var sum = 0;
+    var _this = this;
     $.each(assignments, function(index, assignment) {
-      if (assignment.get('savedAssignment')) {
-        sum += assignment.get('savedAssignment').get('workload');
-      } else {
-        sum += 1;
+      var savedAssignment = _this.getOrCreateSavedAssignment(assignment.get('title'));
+      if (savedAssignment.get('status') == null || savedAssignment.get('status') == 'Todo') {
+        sum += parseInt(savedAssignment.get('workload'));
       }
     });
     return sum;
