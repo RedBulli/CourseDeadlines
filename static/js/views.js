@@ -64,9 +64,12 @@ var CourseEnrollmentsView = Backbone.View.extend({
     }));
     var _this = this;
     $.each(dateGroups, function(index, object) {
-      var el = $('#assignments_day_'+object.time);
+      var el = $('#assignments_day_' + object.time);
       $.each(object.assignments, function(index, assignment) {
-        var dlv = new DeadlineView({model: assignment, el: el});
+        var dlv = new DeadlineView({
+          model: assignment,
+          el: el
+        });
         dlv.render();
       });
     });
@@ -111,6 +114,7 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
   initialize: function() {
     this.portrait_template = Handlebars.compile($("#portrait_tmpl").html());
     this.lastOrientation;
+    this.first_template = Handlebars.compile($("#first_use_tmpl").html());
     var _this = this;
     window.addEventListener("resize", function() {
       if (_this.lastOrientation != _this.is_landscape()) {
@@ -122,12 +126,17 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
     return (window.innerHeight * 2 <= window.innerWidth);
   },
   render: function() {
-    this.lastOrientation = this.is_landscape();
-    if (this.lastOrientation) {
-      this.landscapeView.render();
-    } else {
-      this.$el.html(this.portrait_template);
-      this.courseView.render();
+    if (this.landscapeView.collection.size() == 0) {
+      this.$el.html(this.first_template);
+    } 
+    else {
+      this.lastOrientation = this.is_landscape();
+      if (this.lastOrientation) {
+        this.landscapeView.render();
+      } else {
+        this.$el.html(this.portrait_template);
+        this.courseView.render();
+      }
     }
   }
 });
