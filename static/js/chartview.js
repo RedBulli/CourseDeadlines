@@ -27,14 +27,10 @@ var ChartView = Backbone.View.extend({
   },
   drawChart: function(selectedValue, selectedDate) {
     var selectedValue = $('#myList').val();
-    var selectedDate = $('#rangeSelectionList').val();
+    //var selectedDate = $('#rangeSelectionList').val();
     if (selectedValue == 'Continuous') {
-      this.drawLineChart(selectedDate, false);
-    } else if (selectedValue == 'Timeline') {
-      this.timelineHover();
-      this.setTouchevents();
+      this.drawLineChart(30, false);
     } else {
-      //this.stackedBars(selectedDate, false);
       this.googleColumnChart();
     }
   },
@@ -85,13 +81,6 @@ var ChartView = Backbone.View.extend({
       isStacked: true
     });
   },
-  setTouchevents: function() {
-    $("#chart_holder #info circle").each(function() {
-      $(this).bind("touchstart", function() {
-        $(this).click();
-      });
-    });
-  },
   drawLineChart: function(dateRange, useOldData) {
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'date');
@@ -126,77 +115,4 @@ var ChartView = Backbone.View.extend({
     var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
     chart.draw(data, options);
   },
-  drawColumnChart: function(dateRange, useOldData) {
-    var mylist = document.getElementById("myList");
-    console.log('mylist is: ' + mylist);
-
-    var data = new google.visualization.DataTable();
-    data.addColumn('number', 'week');
-    this.collection.each(function(course) {
-      data.addColumn('number', course.get('title'));
-    });
-    dateCounter = 1;
-    monthCounter = 3;
-    var alphaCounter = 0;
-    var betaCounter = 0;
-    var gammaCounter = 0;
-    var deltaCounter = 0;
-    var previousWeek = 0;
-    for (var i = 0; i < 30; i++) {
-      courseSelector = Math.floor((Math.random() * 4) + 1);
-      dateCounter = dateCounter + Math.floor((Math.random() * 4) + 1);
-      var date = new Date(2013, monthCounter, dateCounter);
-      var week = date.getWeek();
-      if (week > previousWeek) {
-        previousWeek = week;
-        var alphaCounter = 0;
-        var betaCounter = 0;
-        var gammaCounter = 0;
-        var deltaCounter = 0;
-      }
-      switch (courseSelector) {
-        case 1:
-          alphaCounter++;
-          data.addRows([
-            [week, alphaCounter, betaCounter, gammaCounter, deltaCounter]
-          ]);
-          console.log('case 1');
-          break;
-        case 2:
-          betaCounter++;
-          data.addRows([
-            [week, alphaCounter, betaCounter, gammaCounter, deltaCounter]
-          ]);
-          console.log('case 2');
-          break;
-        case 3:
-          gammaCounter++;
-          data.addRows([
-            [week, alphaCounter, betaCounter, gammaCounter, deltaCounter]
-          ]);
-          console.log('case 3');
-          break;
-        case 4:
-          deltaCounter++;
-          data.addRows([
-            [week, alphaCounter, betaCounter, gammaCounter, deltaCounter]
-          ]);
-          console.log('case 4');
-          break;
-      }
-
-      if (dateCounter > 30) {
-        dateCounter = dateCounter - 30;
-        monthCounter++;
-      }
-    }
-    var options = {
-      title: 'Course Work Load',
-      isStacked: true,
-      displayAnnotations: true
-    };
-
-    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
 });

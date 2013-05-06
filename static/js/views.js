@@ -123,21 +123,47 @@ var PortraitLandscapeSwitchView = Backbone.View.extend({
     }, false);
   },
   is_landscape: function() {
-    return (window.innerHeight * 2 <= window.innerWidth);
+    return (window.innerHeight <= window.innerWidth);
   },
-  render: function() {
+  render: function(landscape) {
     if (this.landscapeView.collection.size() == 0) {
       this.$el.html(this.first_template);
     } 
     else {
-      this.lastOrientation = this.is_landscape();
-      if (this.lastOrientation) {
-        this.landscapeView.render();
-      } else {
-        this.$el.html(this.portrait_template);
-        this.courseView.render();
+      if (landscape != undefined) {
+        if (landscape == 'landscape') {
+          this.renderLandscape();
+        }
+        else {
+          this.renderPortrait();
+        }
+      }
+      else {
+        this.lastOrientation = this.is_landscape();
+        if (this.lastOrientation) {
+          this.renderLandscape();
+        } else {
+          this.renderPortrait();
+        }
       }
     }
+    this.bindSwitch();
+  },
+  bindSwitch: function() {
+    var _this = this;
+    $('#toGraph').click(function(event) {
+      _this.render('landscape');
+    });
+    $('#toList').click(function(event) {
+      _this.render('portrait');
+    });
+  },
+  renderPortrait: function() {
+    this.$el.html(this.portrait_template);
+    this.courseView.render();
+  },
+  renderLandscape: function() {
+    this.landscapeView.render();
   }
 });
 
