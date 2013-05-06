@@ -11,7 +11,7 @@ var DeadlineView = Backbone.View.extend({
     }
     var done = (savedAssignment.get('status') == 'Done');
     var element = $(this.template({
-      deadline: this.model,
+      deadline: this.model.customToJSON(),
       savedAssignment: savedAssignment,
       done: done
     }));

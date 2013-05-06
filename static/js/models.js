@@ -50,7 +50,16 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
       var thisDate = new Date(Date.parse(assignment.get('deadline')));
       return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()) && (thisDate.getDate() === date.getDate()));
     });
-    return assignments.length;
+    var sum = 0;
+    $.each(assignments, function(index, assignment) {
+      if (assignments.get('savedAssignment')) {
+        sum += assignments.get('savedAssignment').get('workload');
+      }
+      else {
+        sum += 1;
+      }
+    });
+    return sum;
   },
   getFutureAssignments: function() {
     var allAssignments = this.get('noppa_course').get('assignments');
@@ -126,6 +135,11 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
     assignment.set('workload', workload);
     assignment.set('highlight', highlight);
     assignment.save();
+  },
+  customToJSON: function() {
+    var json = this.toJSON();
+    json.customDate = this.get('deadline');
+    return json;
   }
 });
 
