@@ -10,7 +10,8 @@ from django.db import IntegrityError
 
 
 def signup(request):
-    
+    return render(request, "index.html")
+    '''
     user = request.user
     if user.is_authenticated():
         
@@ -40,7 +41,7 @@ def signup(request):
                 
         
     return render(request, "index.html")
-
+    '''
 def settings(request):
     user = request.user
     if user.is_authenticated():
