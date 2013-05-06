@@ -90,12 +90,13 @@ var ChartView = Backbone.View.extend({
   }
   
   
-    var n = 4, // number of layers
+    n = this.collection.size(), // number of layers
       m = 58, // number of samples per layer
       stack = d3.layout.stack(),
       layers = stack(d3.range(n).map(function() { return bumpLayer(m, .1); })),
       yGroupMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y; }); }),
       yStackMax = d3.max(layers, function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); });
+	
 	
     var margin = {top: 40, right: 10, bottom: 20, left: 10},
       width = 960 - margin.left - margin.right,
