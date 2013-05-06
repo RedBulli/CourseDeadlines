@@ -124,7 +124,8 @@ var ChartView = Backbone.View.extend({
           min: firstDate,
           max: lastDate
         }
-      }
+      },
+      pointSize: 2
     };
 
     var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
