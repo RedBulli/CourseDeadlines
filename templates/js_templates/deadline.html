@@ -2,15 +2,17 @@
 {% tplhandlebars "deadline_tmpl" %}
 
 <div id="oneCourse">
-  <div class="oneDeadline">
-    {{deadline.attributes.deadline}}: <br><br>{{deadline.attributes.title}}
-    <div class="dlButtons">
-      {{#done}}
-      DONE!
-      {{else}}
+{{#done}}
+  <div class="oneDeadline doneDeadline">
+    <div class="dlButtons">  
+      DONE! <button class="trashButton">Trash</button>
+{{else}}
+   <div class="oneDeadline undoneDeadline">
+     <div class="dlButtons">
       <button class="doneButton">Done</button> <button class="trashButton">Trash</button>
-      {{/done}}
+{{/done}}
     </div>
+    {{deadline.attributes.deadline}}: <br><br>{{deadline.attributes.title}}
   </div>
 </div>
 {% endtplhandlebars %}

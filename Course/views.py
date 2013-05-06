@@ -11,8 +11,7 @@ from django.db import IntegrityError
 
 def signup(request):
     return render(request, "index.html")
-        
-
+  
 def chart(request):
     user = request.user
     if user.is_authenticated():
