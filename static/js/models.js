@@ -55,7 +55,7 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
   },
   getWorkload: function(date) {
     var assignments = this.get('noppa_course').get('assignments').filter(function(assignment) {
-      var thisDate = new Date(Date.parse(assignment.get('deadline')));
+      var thisDate = assignment.getDateObjectDeadline();
       return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()) && (thisDate.getDate() === date.getDate()));
     });
     var sum = 0;
@@ -71,7 +71,7 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
   getFutureAssignments: function() {
     var allAssignments = this.get('noppa_course').get('assignments');
     return allAssignments.filter(function(assignment) {
-      return (new Date(Date.parse(assignment.get('deadline'))) >= new Date());
+      return (assignment.getDateObjectDeadline() >= new Date());
     });
   }
 });
@@ -112,17 +112,17 @@ var CourseEnrollments = Backbone.Collection.extend({
     var assignments = this.getAssignments();
     var dates = {};
     $.each(assignments, function(index, assignment) {
-      var date = truncateDate(new Date(Date.parse(assignment.get('deadline'))));
-      if (dates.hasOwnProperty(date)) {
-        dates[date].push(assignment);
+      var time = truncateDate(assignment.getDateObjectDeadline()).getTime();
+      if (dates.hasOwnProperty(time)) {
+        dates[time].push(assignment);
       } else {
-        dates[date] = [assignment];
+        dates[time] = [assignment];
       }
     });
     var dateArray = [];
     $.each(dates, function(date, assignments) {
       dateArray.push({
-        date: date,
+        date: new Date(parseInt(date)),
         assignments: assignments.sort(function(a, b) {
           return a.getDateObjectDeadline() > b.getDateObjectDeadline();
         })
@@ -130,7 +130,7 @@ var CourseEnrollments = Backbone.Collection.extend({
     });
     //Doesnt work properly yet
     return dateArray.sort(function(a, b) {
-      return a.date < b.date;
+      return a.date > b.date;
     });
   }
 });
@@ -177,7 +177,7 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
   },
   customToJSON: function() {
     var json = this.toJSON();
-    var date = new Date(Date.parse(this.get('deadline')));
+    var date = this.getDateObjectDeadline();
     json.customDate = date;
     json.courseName = this.get('course').get('name');
     return json;
