@@ -5769,6 +5769,9 @@ header #login a:not(#logoutButton) {
   text-align: left;
   list-style-type: none;
 }
+.courseAssignments {
+  list-style-type: none;
+}
 #content #loginButton {
   margin-top: 1.25em;
 }

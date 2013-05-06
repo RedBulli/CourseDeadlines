@@ -54,7 +54,7 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
     return assignment;
   },
   getWorkload: function(date) {
-    var assignments = this.get('noppa_course').get('assignments').filter(function(assignment) {
+    var assignments = _.filter(this.getFutureAssignments(), function(assignment) {
       var thisDate = assignment.getDateObjectDeadline();
       return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()) && (thisDate.getDate() === date.getDate()));
     });

@@ -1,6 +1,6 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "deadline_tmpl" %}
-
+<li>
 <div id="oneCourse">
   <div class="oneDeadline {{#done}}doneDeadline{{else}}undoneDeadline{{/done}}">
     <div class="dlButtons">
@@ -16,4 +16,5 @@
     {{deadline.title}}
   </div>
 </div>
+</li>
 {% endtplhandlebars %}

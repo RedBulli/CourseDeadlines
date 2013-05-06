@@ -16,7 +16,12 @@ var DeadlineView = Backbone.View.extend({
       savedAssignment: savedAssignment,
       done: done
     }));
-    this.$el.html(element);
+    if (!this.$el.is(':empty')) {
+      this.$el.html(element);
+    } else {
+      this.$el = element;
+      this.parentEl.append(element);
+    }
     this.bindClicks();
     return this;
   },
@@ -67,9 +72,9 @@ var CourseEnrollmentsView = Backbone.View.extend({
       var el = $('#assignments_day_' + object.time);
       $.each(object.assignments, function(index, assignment) {
         var dlv = new DeadlineView({
-          model: assignment,
-          el: el
+          model: assignment
         });
+        dlv.parentEl = el;
         dlv.render();
       });
     });
