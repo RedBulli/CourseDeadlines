@@ -170,8 +170,12 @@ var ChartView = Backbone.View.extend({
   });
 
   $('#chart_div').html("");
+  $('#chart_div').css('width', '98%');
+  $('#chart_div').css('overflow', 'hidden');
+  
   var svg = d3.select("#chart_div").append("svg").attr("width", this.width)
     .datum(this.getDeadlinesJSON()).call(chart);
+  $('#chart_div').find('svg:first').draggable({ axis: "x" });
 },
   
   drawLineChart: function(dateRange, useOldData) {
