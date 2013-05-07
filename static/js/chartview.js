@@ -17,16 +17,21 @@ var ChartView = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template());
     this.bindChanges();
-    this.drawChart();
+    this.drawChart($('#myList').val());
   },
   bindChanges: function() {
     var _this = this;
     $('#myList, #rangeSelectionList').change(function() {
-      _this.drawChart();
+      _this.drawChart($('#myList').val());
     });
   },
   drawChart: function(selectedValue, selectedDate) {
-    this.googleColumnChart($('#myList').val());
+	if (selectedValue == 'timeLine'){
+		this.timelineHover()
+	}
+	else{
+		this.googleColumnChart($('#myList').val());
+	}
   },
   getDeadlinesJSON: function() {
     var deadlines = this.collection.getAssignments();
@@ -130,6 +135,45 @@ var ChartView = Backbone.View.extend({
       isStacked: true
     });
   },
+  
+  timelineHover: function () {
+  var chart = d3.timeline()
+    .display("circle")
+    .width(2000)
+    .stack()
+    .margin({
+    left: 200,
+    right: 30,
+    top: 0,
+    bottom: 0
+  })
+    .tickFormat({
+    format: d3.time.format("%d.%m"),
+    tickTime: d3.time.hours,
+    tickNumber: 24,
+    tickSize: 6
+  })
+    .hover(function(d, i, datum) {
+    // d is the current rendering object
+    // i is the index during d3 rendering
+    // datum is the id object
+
+    var colors = chart.colors();
+    //sdiv.find('.coloredDiv').css('background-color', colors(i))
+  })
+    .click(function(d, i, datum) {
+    var div = $('#chart_div');
+    div.find("#info").html(datum.label + "<br />" + datum.times[0].deadline_label);
+  })
+    .scroll(function(x, scale) {
+    $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x + this.width));
+  });
+
+  $('#chart_div').html("");
+  var svg = d3.select("#chart_div").append("svg").attr("width", this.width)
+    .datum(this.getDeadlinesJSON()).call(chart);
+},
+  
   drawLineChart: function(dateRange, useOldData) {
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'date');
