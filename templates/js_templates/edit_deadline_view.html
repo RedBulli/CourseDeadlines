@@ -12,10 +12,11 @@
           <div class="control-group">
             <p><b>Course Name:</b> {{deadline.courseName}} </p>
             <p><b>Deadline Date:</b> {{deadline.customDateString}}</p>
-            <p><b>Description:</b><textarea readonly class="deadlineDescription">{{deadline.content}}</textarea></p>
+            <b>Description:</b>
+            <p class="deadlineDescription">{{deadline.content}}</p>
           </div>
             <span class="highligtText">Workload:</span> <input type="number" min="0" max="99" class="workloadText" name="workload" value="{{savedAssignment.attributes.workload}}">
-            <span class="highligtText">Highlight:</span> <input type="checkbox" class="highlightCheckbox" name="highlight" value="true" {{#savedAssignment.attributes.highlight}}checked{{/savedAssignment.attributes.highlight}}> 
+            <!--<span class="highligtText">Highlight:</span> <input type="checkbox" class="highlightCheckbox" name="highlight" value="true" {{#savedAssignment.attributes.highlight}}checked{{/savedAssignment.attributes.highlight}}> -->
             <input type="hidden" name="settings" value="True">
           </form>
         </div>

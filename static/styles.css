@@ -5843,7 +5843,7 @@ header #login a:not(#logoutButton) {
   margin: auto;
 }
 .workloadText {
-  width: 2em;
+  width: 2.2em;
   height: 0.125em;
   -webkit-transform: scale(1.1, 1.1);
   -moz-transform: scale(1, 1);
@@ -5875,9 +5875,10 @@ input[type="checkbox"] {
 input[type="number"] {
   margin-bottom: 0em;
 }
-textarea.deadlineDescription {
+.deadlineDescription {
   height: 5.625em;
   width: 16.875em;
+  overflow: scroll;
 }
 .undoneDeadline {
   background: #a9e2f3;
