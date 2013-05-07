@@ -142,15 +142,15 @@ var ChartView = Backbone.View.extend({
     .width(2000)
     .stack()
     .margin({
-    left: 200,
+    left: 250,
     right: 30,
     top: 0,
     bottom: 0
   })
     .tickFormat({
     format: d3.time.format("%d.%m"),
-    tickTime: d3.time.hours,
-    tickNumber: 72,
+    tickTime: d3.time.days,
+    tickNumber: 3,
     tickSize: 6
   })
     .hover(function(d, i, datum) {
