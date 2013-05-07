@@ -103,7 +103,7 @@ var ChartView = Backbone.View.extend({
       var dateObject = new Date(firstDate.getFullYear(), firstDate.getMonth(lastDate+1));
       lastDate = dateObject.getMonth();
       var rowData = [];
-      rowData.push(lastDate);
+      rowData.push(lastDate+1);
       this.collection.each(function(course) {
         rowData.push(course.getMonthlyWorkload(dateObject));
       });
