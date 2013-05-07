@@ -26,13 +26,7 @@ var ChartView = Backbone.View.extend({
     });
   },
   drawChart: function(selectedValue, selectedDate) {
-    var selectedValue = $('#myList').val();
-    //var selectedDate = $('#rangeSelectionList').val();
-    if (selectedValue == 'Continuous') {
-      this.drawLineChart(30, false);
-    } else {
-      this.googleColumnChart();
-    }
+    this.googleColumnChart($('#myList').val());
   },
   getDeadlinesJSON: function() {
     var deadlines = this.collection.getAssignments();
@@ -53,14 +47,14 @@ var ChartView = Backbone.View.extend({
       ending_time: date
     }];
   },
-  googleColumnChart: function() {
+  getDailyData: function() {
     var data = new google.visualization.DataTable();
+    var firstDate = new Date();
+    var lastDate;
     data.addColumn('date', 'date');
     this.collection.each(function(course) {
       data.addColumn('number', course.get('noppa_course').get('name'));
     });
-    var firstDate = new Date();
-    var lastDate;
     for (var i = 0; i < 7; i++) {
       lastDate = new Date(firstDate.getTime() + i * 24 * 60 * 60 * 1000);
       var rowData = [];
@@ -70,13 +64,68 @@ var ChartView = Backbone.View.extend({
       });
       data.addRows([rowData]);
     }
+    return data;
+  },
+  getWeeklyData: function() {
+    var data = new google.visualization.DataTable();
+    var firstDate = new Date();
+    var lastDate;
+    data.addColumn('number', 'week');
+    this.collection.each(function(course) {
+      data.addColumn('number', course.get('noppa_course').get('name'));
+    });
+    for (var i = 0; i < 7; i++) {
+      var dateObject = new Date(firstDate.getTime() + i * 7 * 24 * 60 * 60 * 1000);
+      lastDate = dateObject.getWeek();
+      var rowData = [];
+      rowData.push(lastDate);
+      this.collection.each(function(course) {
+        rowData.push(course.getWeeklyWorkload(dateObject));
+      });
+      data.addRows([rowData]);
+    }
+    return data;
+  },
+  getMonthlyData: function() {
+    var data = new google.visualization.DataTable();
+    var firstDate = new Date();
+    var lastDate;
+    data.addColumn('number', 'month');
+    this.collection.each(function(course) {
+      data.addColumn('number', course.get('noppa_course').get('name'));
+    });
+    for (var i = 0; i < 7; i++) {
+      var dateObject = new Date(firstDate.getFullYear(), firstDate.getMonth(lastDate+1));
+      lastDate = dateObject.getMonth();
+      var rowData = [];
+      rowData.push(lastDate);
+      this.collection.each(function(course) {
+        rowData.push(course.getMonthlyWorkload(dateObject));
+      });
+      data.addRows([rowData]);
+    }
+    return data;
+  },
+  googleColumnChart: function(group) {
+    var data;
+    var title;
+    if (group == 'daily') {
+      data = this.getDailyData();
+      title = 'Date';
+    } else if (group == 'weekly') {
+      data = this.getWeeklyData();
+      title = 'Week';
+    } else {
+      data = this.getMonthlyData();
+      title = 'Month';
+    }
     new google.visualization.ColumnChart(document.getElementById('chart_div')).
     draw(data, {
       title: "Assignments workload",
       width: 600,
       height: 400,
       hAxis: {
-        title: "Date"
+        title: title
       },
       isStacked: true
     });

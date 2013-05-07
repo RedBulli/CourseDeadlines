@@ -53,11 +53,7 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
     }
     return assignment;
   },
-  getWorkload: function(date) {
-    var assignments = _.filter(this.getFutureAssignments(), function(assignment) {
-      var thisDate = assignment.getDateObjectDeadline();
-      return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()) && (thisDate.getDate() === date.getDate()));
-    });
+  getWorkloadForAssignments: function(assignments) {
     var sum = 0;
     var _this = this;
     $.each(assignments, function(index, assignment) {
@@ -67,6 +63,27 @@ var CourseEnrollment = Backbone.RelationalModel.extend({
       }
     });
     return sum;
+  },
+  getWorkload: function(date) {
+    var assignments = _.filter(this.getFutureAssignments(), function(assignment) {
+      var thisDate = assignment.getDateObjectDeadline();
+      return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()) && (thisDate.getDate() === date.getDate()));
+    });
+    return this.getWorkloadForAssignments(assignments);
+  },
+  getWeeklyWorkload: function(date) {
+    var assignments = _.filter(this.getFutureAssignments(), function(assignment) {
+      var thisDate = assignment.getDateObjectDeadline();
+      return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getWeek() === date.getWeek()));
+    });
+    return this.getWorkloadForAssignments(assignments);
+  },
+  getMonthlyWorkload: function(date) {
+    var assignments = _.filter(this.getFutureAssignments(), function(assignment) {
+      var thisDate = assignment.getDateObjectDeadline();
+      return ((thisDate.getFullYear() === date.getFullYear()) && (thisDate.getMonth() === date.getMonth()));
+    });
+    return this.getWorkloadForAssignments(assignments);
   },
   getFutureAssignments: function() {
     var allAssignments = this.get('noppa_course').get('assignments');
@@ -134,7 +151,7 @@ var CourseEnrollments = Backbone.Collection.extend({
     return dateArray.sort(function(a, b) {
       return a.date > b.date;
     });
-  }
+  },
 });
 
 var Assignment = Backbone.RelationalModel.extend({
