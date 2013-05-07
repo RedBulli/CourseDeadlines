@@ -68,7 +68,7 @@ var ChartView = Backbone.View.extend({
     this.collection.each(function(course) {
       data.addColumn('number', course.get('noppa_course').get('name'));
     });
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < 14; i++) {
       lastDate = new Date(firstDate.getTime() + i * 24 * 60 * 60 * 1000);
       var rowData = [];
       rowData.push(lastDate);
@@ -107,7 +107,7 @@ var ChartView = Backbone.View.extend({
     this.collection.each(function(course) {
       data.addColumn('number', course.get('noppa_course').get('name'));
     });
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < 6; i++) {
       var dateObject = new Date(firstDate.getFullYear(), firstDate.getMonth(lastDate + 1));
       lastDate = dateObject.getMonth();
       var rowData = [];
@@ -122,6 +122,7 @@ var ChartView = Backbone.View.extend({
   googleColumnChart: function(group) {
     var data;
     var title;
+    var format;
     if (group == 'daily') {
       data = this.getDailyData();
       title = 'Date';
@@ -131,6 +132,7 @@ var ChartView = Backbone.View.extend({
     } else {
       data = this.getMonthlyData();
       title = 'Month';
+      format = '#';
     }
     new google.visualization.ColumnChart(document.getElementById('chart_div')).
     draw(data, {
@@ -138,7 +140,11 @@ var ChartView = Backbone.View.extend({
       width: 600,
       height: 400,
       hAxis: {
-        title: title
+        title: title,
+        format: format
+      },
+      vAxis: {
+        format: format
       },
       isStacked: true
     });

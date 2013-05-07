@@ -141,7 +141,7 @@ var CourseEnrollments = Backbone.Collection.extend({
       var dateObj = new Date(parseInt(date));
       dateArray.push({
         date: dateObj,
-        dateString: dateObj.toLocaleDateString(),
+        dateString: dateObj.toLocaleDateString('fi'),
         time: dateObj.getTime(),
         assignments: assignments.sort(function(a, b) {
           return a.getDateObjectDeadline() > b.getDateObjectDeadline();
@@ -199,7 +199,7 @@ var NoppaAssignment = Backbone.RelationalModel.extend({
     var date = this.getDateObjectDeadline();
     json.customDate = date;
     json.courseName = this.get('course').get('name');
-    json.localeTimeString = new Date(Date.parse(this.get('deadline'))).toLocaleTimeString();
+    json.localeTimeString = new Date(Date.parse(this.get('deadline'))).toLocaleTimeString('fi');
     return json;
   },
   getDateObjectDeadline: function() {
