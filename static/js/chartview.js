@@ -48,7 +48,7 @@ var ChartView = Backbone.View.extend({
   dateToStartEnd: function(dateString) {
     var date = new Date(Date.parse(dateString));
     return [{
-      starting_time: date - 2000000000,
+      starting_time: date,
       ending_time: date
     }];
   },
@@ -150,7 +150,7 @@ var ChartView = Backbone.View.extend({
     .tickFormat({
     format: d3.time.format("%d.%m"),
     tickTime: d3.time.hours,
-    tickNumber: 24,
+    tickNumber: 72,
     tickSize: 6
   })
     .hover(function(d, i, datum) {
