@@ -10,6 +10,7 @@ Date.prototype.getWeek = function() {
 var ChartView = Backbone.View.extend({
   initialize: function() {
     this.width = 2000;
+    this.lastSelection;
     this.template = Handlebars.compile($("#landscape_tmpl").html());
     _.bindAll(this, 'render');
     this.collection.bind('add', this.render);
@@ -17,21 +18,28 @@ var ChartView = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template());
     this.bindChanges();
-    this.drawChart($('#myList').val());
+    if (this.lastSelection) {
+      $('#myList').val(this.lastSelection);
+    }
+    this.drawChart(this.lastSelection);
   },
   bindChanges: function() {
     var _this = this;
     $('#myList, #rangeSelectionList').change(function() {
-      _this.drawChart($('#myList').val());
+      _this.lastSelection = $('#myList').val();
+      _this.drawChart(_this.lastSelection);
     });
   },
   drawChart: function(selectedValue, selectedDate) {
-	if (selectedValue == 'timeLine'){
-		this.timelineHover()
-	}
-	else{
-		this.googleColumnChart($('#myList').val());
-	}
+    if (selectedValue == 'timeLine') {
+      this.timelineHover()
+    } else {
+      var val = $('#myList').val();
+      if (selectedValue) {
+        val = selectedValue;
+      }
+      this.googleColumnChart(val);
+    }
   },
   getDeadlinesJSON: function() {
     var deadlines = this.collection.getAssignments();
@@ -100,10 +108,10 @@ var ChartView = Backbone.View.extend({
       data.addColumn('number', course.get('noppa_course').get('name'));
     });
     for (var i = 0; i < 7; i++) {
-      var dateObject = new Date(firstDate.getFullYear(), firstDate.getMonth(lastDate+1));
+      var dateObject = new Date(firstDate.getFullYear(), firstDate.getMonth(lastDate + 1));
       lastDate = dateObject.getMonth();
       var rowData = [];
-      rowData.push(lastDate+1);
+      rowData.push(lastDate + 1);
       this.collection.each(function(course) {
         rowData.push(course.getMonthlyWorkload(dateObject));
       });
@@ -135,39 +143,44 @@ var ChartView = Backbone.View.extend({
       isStacked: true
     });
   },
-  
-  timelineHover: function () {
-  var chart = d3.timeline()
-    .display("circle")
-    .width(2000)
-    .stack()
-    .margin({
-    left: 250,
-    right: 30,
-    top: 0,
-    bottom: 0
-  })
-    .tickFormat({
-    format: d3.time.format("%d.%m"),
-    tickTime: d3.time.days,
-    tickNumber: 3,
-    tickSize: 6
-  })
-    .hover(function(d, i, datum) {
-    // d is the current rendering object
-    // i is the index during d3 rendering
-    // datum is the id object
 
-    var colors = chart.colors();
-    //sdiv.find('.coloredDiv').css('background-color', colors(i))
-  })
-    .click(function(d, i, datum) {
-    var div = $('#chart_div');
-    div.find("#info").html(datum.label + "<br />" + datum.times[0].deadline_label);
-  })
-    .scroll(function(x, scale) {
-    $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x + this.width));
-  });
+  timelineHover: function() {
+    var chart = d3.timeline()
+      .display("circle")
+      .width(2000)
+      .stack()
+      .margin({
+      left: 250,
+      right: 30,
+      top: 0,
+      bottom: 0
+    })
+      .tickFormat({
+      format: d3.time.format("%d.%m"),
+      tickTime: d3.time.days,
+      tickNumber: 3,
+      tickSize: 6
+    })
+      .hover(function(d, i, datum) {
+      // d is the current rendering object
+      // i is the index during d3 rendering
+      // datum is the id object
+
+      var colors = chart.colors();
+      //sdiv.find('.coloredDiv').css('background-color', colors(i))
+    })
+      .click(function(d, i, datum) {
+      var div = $('#chart_div');
+      div.find("#info").html(datum.label + "<br />" + datum.times[0].deadline_label);
+    })
+      .scroll(function(x, scale) {
+      $("#scrolled_date").text(scale.invert(x) + " to " + scale.invert(x + this.width));
+    });
+
+    $('#chart_div').html("");
+    var svg = d3.select("#chart_div").append("svg").attr("width", this.width)
+      .datum(this.getDeadlinesJSON()).call(chart);
+  },
 
   $('#chart_div').html("");
   $('#chart_div').css('width', '98%');
@@ -177,7 +190,6 @@ var ChartView = Backbone.View.extend({
     .datum(this.getDeadlinesJSON()).call(chart);
   $('#chart_div').find('svg:first').draggable({ axis: "x" });
 },
-  
   drawLineChart: function(dateRange, useOldData) {
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'date');
