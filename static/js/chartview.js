@@ -46,10 +46,13 @@ var ChartView = Backbone.View.extend({
     var jsonList = [];
     var _this = this;
     $.each(deadlines, function(index, deadline) {
-      var element = {};
-      element.label = deadline.get('title');
-      element.times = _this.dateToStartEnd(deadline.get('deadline'));
-      jsonList.push(element);
+      var savedDl = deadline.getOrCreateSavedAssignment();
+      if (savedDl.get('status') == null || savedDl.get('status') == 'Todo') {
+        var element = {};
+        element.label = deadline.get('title');
+        element.times = _this.dateToStartEnd(deadline.get('deadline'));
+        jsonList.push(element);
+      }
     });
     return jsonList;
   },
@@ -188,7 +191,9 @@ var ChartView = Backbone.View.extend({
     $('#chart_div').css('overflow', 'hidden');
     var svg = d3.select("#chart_div").append("svg").attr("width", this.width)
       .datum(this.getDeadlinesJSON()).call(chart);
-  $('#chart_div').find('svg:first').draggable({ axis: "x" });
+    $('#chart_div').find('svg:first').draggable({
+      axis: "x"
+    });
   },
   drawLineChart: function(dateRange, useOldData) {
     var data = new google.visualization.DataTable();
