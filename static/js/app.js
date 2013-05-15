@@ -93,6 +93,10 @@ function bindUiActions() {
       courseNameSearch();
     }
   });
+  $('#courseSearchForm button').click(function(e) {
+    e.preventDefault();
+    courseNameSearch();
+  });
 }
 
 function courseNameSearch() {
@@ -105,10 +109,6 @@ function courseNameSearch() {
 function addBootstrapClasses() {
   $('#newCourseModal').addClass('modal hide fade');
   $('#courseSearchForm button').addClass('btn');
-  $('#courseSearchForm button').click(function(e) {
-    e.preventDefault();
-    courseNameSearch();
-  });
 }
 
 var spinnerOptions = {
