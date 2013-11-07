@@ -1,5 +1,7 @@
 CourseDeadlines
 ===============
+A school project for T-111.5360	WWW Applications P
+
 Get started
 
 1. Pull the source code
